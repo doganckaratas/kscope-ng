@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -14,6 +15,7 @@ void MainWindow::setupSignals()
     connect(ui->actionNew, SIGNAL(triggered()), this, SLOT(newFile()));
     connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(openFile()));
     connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(saveFile()));
+    connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(aboutDialog()));
 }
 
 void MainWindow::newFile()
@@ -29,6 +31,15 @@ void MainWindow::openFile()
 void MainWindow::saveFile()
 {
     statusBar()->showMessage("Save File");
+}
+
+void MainWindow::aboutDialog()
+{
+    QMessageBox *qm = new QMessageBox(this);
+    qm->setMinimumHeight(60);
+    qm->setWindowTitle("About");
+    qm->setText("Hello, this is About Box,\nFill here with license, author, version, etc.\n~~~~~~~~~~~~~~~~~~~~~~~~\n");
+    qm->exec();
 }
 
 MainWindow::~MainWindow()
