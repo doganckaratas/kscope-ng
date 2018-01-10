@@ -13,6 +13,7 @@ void MainWindow::setupSignals()
 {
     connect(ui->actionNew, SIGNAL(triggered()), this, SLOT(newFile()));
     connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(openFile()));
+    connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(saveFile()));
 }
 
 void MainWindow::newFile()
@@ -23,6 +24,11 @@ void MainWindow::newFile()
 void MainWindow::openFile()
 {
     statusBar()->showMessage("OPEN");
+}
+
+void MainWindow::saveFile()
+{
+    statusBar()->showMessage("SAVE");
 }
 
 MainWindow::~MainWindow()
