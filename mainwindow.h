@@ -17,10 +17,12 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    void setupSignals();
 
 private slots:
     void newFile();
     void openFile();
+    void saveFile();
 };
 
 #endif // MAINWINDOW_H
