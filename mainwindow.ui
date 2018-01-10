@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>KScope-NG</string>
+   <string>KScope-NG # UNDER CONSTRUCTION #</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout_2">
@@ -19,6 +19,9 @@
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
        <number>0</number>
+      </property>
+      <property name="documentMode">
+       <bool>true</bool>
       </property>
       <property name="tabsClosable">
        <bool>true</bool>
@@ -30,7 +33,16 @@
        <attribute name="title">
         <string>Untitled</string>
        </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout_3"/>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QTextEdit" name="textEdit"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>Page</string>
+       </attribute>
       </widget>
      </widget>
     </item>
