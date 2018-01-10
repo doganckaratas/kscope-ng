@@ -187,6 +187,12 @@ public:
         menuHelp->setTitle(QApplication::translate("MainWindow", "Help", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", 0, QApplication::UnicodeUTF8));
         mainToolBar->setWindowTitle(QApplication::translate("MainWindow", "Main Toolbar", 0, QApplication::UnicodeUTF8));
+#ifndef QT_NO_TOOLTIP
+        statusBar->setToolTip(QString());
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_STATUSTIP
+        statusBar->setStatusTip(QString());
+#endif // QT_NO_STATUSTIP
         dockWidget_11->setWindowTitle(QApplication::translate("MainWindow", "CScope", 0, QApplication::UnicodeUTF8));
         dockWidget_12->setWindowTitle(QApplication::translate("MainWindow", "Files", 0, QApplication::UnicodeUTF8));
         dockWidget_14->setWindowTitle(QApplication::translate("MainWindow", "Symbols", 0, QApplication::UnicodeUTF8));
