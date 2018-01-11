@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QMessageBox>
+#include <QTabWidget>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -16,10 +17,12 @@ void MainWindow::setupSignals()
     connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(openFile()));
     connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(saveFile()));
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(aboutDialog()));
+    connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
 }
 
 void MainWindow::newFile()
 {
+    ui->tabWidget->addTab(new QTabWidget(this),"TEST");
     statusBar()->showMessage("New File");
 }
 
