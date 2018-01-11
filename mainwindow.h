@@ -17,6 +17,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    int getFirstTabIdFromName(QTabWidget *qtw, std::string name);
     void setupSignals();
 
 private slots:

@@ -3,9 +3,7 @@
 #include <QMessageBox>
 #include <QTabWidget>
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     setupSignals();
@@ -22,7 +20,8 @@ void MainWindow::setupSignals()
 
 void MainWindow::newFile()
 {
-    ui->tabWidget->addTab(new QTabWidget(this),"TEST");
+    ui->tabWidget->addTab(new QTabWidget(this),"New File");
+    ui->tabWidget->setTabText(getFirstTabIdFromName(ui->tabWidget,"New File"), "Renamed Tab");
     statusBar()->showMessage("New File");
 }
 
@@ -41,8 +40,20 @@ void MainWindow::aboutDialog()
     QMessageBox *qm = new QMessageBox(this);
     qm->setMinimumHeight(60);
     qm->setWindowTitle("About");
-    qm->setText("Hello, this is About Box,\nFill here with license, author, version, etc.\n~~~~~~~~~~~~~~~~~~~~~~~~\n");
+    qm->setText("Hello, this is About Box,\n"
+                "Fill here with license, author, version, etc.\n"
+                "~~~~~~~~~~~~~~~~~~~~~~~~\n");
     qm->exec();
+}
+
+int MainWindow::getFirstTabIdFromName(QTabWidget *qtw, std::string name)
+{
+    for(int i = 0; i < qtw->count(); i++) {
+        if(name == qtw->tabText(i).toStdString()) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 MainWindow::~MainWindow()
