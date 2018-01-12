@@ -119,6 +119,7 @@ void MainWindow::aboutDialog()
     qm->setText("KScope-NG\n"
                 "Qt Based CScope Frontend/IDE\n"
                 "Written from scratch\n\n"
+                "Version: "
                 VERSION
                 "Author: Dogan C. Karatas\n"
                 "Release Date: "

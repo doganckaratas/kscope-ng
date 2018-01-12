@@ -13,5 +13,13 @@
         <file>res/icons/cut.png</file>
         <file>res/icons/copy.png</file>
         <file>res/icons/paste.png</file>
+        <file>res/icons/back.png</file>
+        <file>res/icons/decreasefont.png</file>
+        <file>res/icons/find.png</file>
+        <file>res/icons/forward.png</file>
+        <file>res/icons/increasefont.png</file>
+        <file>res/icons/reload.png</file>
+        <file>res/icons/previous.png</file>
+        <file>res/icons/next.png</file>
     </qresource>
 </RCC>

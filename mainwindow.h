@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #define RELEASE_DATE    "12/01/2018\n"
-#define VERSION         "v1.0\n"
+#define VERSION         "v0.2_PRE_RELEASE\n"
 
 namespace Ui {
 class MainWindow;
