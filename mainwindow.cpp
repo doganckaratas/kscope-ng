@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QMessageBox>
 #include <QTabWidget>
+#include <QTextEdit>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -20,8 +21,14 @@ void MainWindow::setupSignals()
 
 void MainWindow::newFile()
 {
-    ui->tabWidget->addTab(new QTabWidget(this),"New File");
-    ui->tabWidget->setTabText(getFirstTabIdFromName(ui->tabWidget,"New File"), "Renamed Tab");
+    QTabWidget *qtw = new QTabWidget(this);
+    QHBoxLayout *qhbl = new QHBoxLayout(qtw);
+    QTextEdit *qte = new QTextEdit();
+    qtw->setTabText(qtw->indexOf(qtw),"New File");
+    qtw->setDocumentMode(true);
+    qhbl->addWidget(qte);
+    qhbl->setMargin(9);
+    ui->tabWidget->addTab(qtw, QString::fromStdString("New File"));
     statusBar()->showMessage("New File");
 }
 
