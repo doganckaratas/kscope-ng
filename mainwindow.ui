@@ -46,6 +46,18 @@
     <property name="title">
      <string>Edit</string>
     </property>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+    <addaction name="separator"/>
+    <addaction name="actionCut"/>
+    <addaction name="actionCopy"/>
+    <addaction name="actionCopy_As_HTML"/>
+    <addaction name="actionPaste"/>
+    <addaction name="separator"/>
+    <addaction name="actionSelect_All"/>
+    <addaction name="actionDeselect"/>
+    <addaction name="actionBlock_Selection"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -59,10 +71,17 @@
     </property>
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
+    <addaction name="separator"/>
+    <addaction name="actionSave_All"/>
+    <addaction name="separator"/>
     <addaction name="actionSave"/>
     <addaction name="actionSave_As"/>
+    <addaction name="actionReload"/>
+    <addaction name="actionPrint"/>
     <addaction name="separator"/>
+    <addaction name="actionExport_as_HTML"/>
     <addaction name="actionClose"/>
+    <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
    <addaction name="menuFile"/>
@@ -233,6 +252,79 @@
    </property>
    <property name="text">
     <string>Save As</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="text">
+    <string>Undo</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="text">
+    <string>Redo</string>
+   </property>
+  </action>
+  <action name="actionCut">
+   <property name="text">
+    <string>Cut</string>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="text">
+    <string>Copy</string>
+   </property>
+  </action>
+  <action name="actionPaste">
+   <property name="text">
+    <string>Paste</string>
+   </property>
+  </action>
+  <action name="actionSelect_All">
+   <property name="text">
+    <string>Select All</string>
+   </property>
+  </action>
+  <action name="actionCopy_As_HTML">
+   <property name="text">
+    <string>Copy As HTML</string>
+   </property>
+  </action>
+  <action name="actionDeselect">
+   <property name="text">
+    <string>Deselect</string>
+   </property>
+  </action>
+  <action name="actionBlock_Selection">
+   <property name="text">
+    <string>Block Selection</string>
+   </property>
+  </action>
+  <action name="actionSave_All">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/res/icons/saveall.png</normaloff>:/icons/res/icons/saveall.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save All</string>
+   </property>
+  </action>
+  <action name="actionReload">
+   <property name="text">
+    <string>Reload</string>
+   </property>
+  </action>
+  <action name="actionPrint">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/res/icons/print.png</normaloff>:/icons/res/icons/print.png</iconset>
+   </property>
+   <property name="text">
+    <string>Print</string>
+   </property>
+  </action>
+  <action name="actionExport_as_HTML">
+   <property name="text">
+    <string>Export as HTML</string>
    </property>
   </action>
  </widget>
