@@ -7,6 +7,9 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    MainWindow::setWindowTitle(QString::fromStdString("KScope-NG - ") +
+                               QString::fromStdString(VERSION));
+    // remove above line from production release
     setupSignals();
     setIconStates(false);
 }
@@ -120,7 +123,7 @@ void MainWindow::aboutDialog()
                 "Qt Based CScope Frontend/IDE\n"
                 "Written from scratch\n\n"
                 "Version: "
-                VERSION
+                VER_STR
                 "Author: Dogan C. Karatas\n"
                 "Release Date: "
                 RELEASE_DATE);
