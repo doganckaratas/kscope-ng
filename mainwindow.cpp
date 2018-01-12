@@ -50,6 +50,16 @@ void MainWindow::setIconStates(bool state)
     }
 }
 
+int MainWindow::getFirstTabIdFromName(QTabWidget *qtw, std::string name)
+{
+    for(int i = 0; i < qtw->count(); i++) {
+        if(name == qtw->tabText(i).toStdString()) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 void MainWindow::newFile()
 {
     QTabWidget *qtw = new QTabWidget(this);
@@ -106,20 +116,14 @@ void MainWindow::aboutDialog()
     QMessageBox *qm = new QMessageBox(this);
     qm->setMinimumHeight(60);
     qm->setWindowTitle("About");
-    qm->setText("Hello, this is About Box,\n"
-                "Fill here with license, author, version, etc.\n"
-                "~~~~~~~~~~~~~~~~~~~~~~~~\n");
+    qm->setText("KScope-NG\n"
+                "Qt Based CScope Frontend/IDE\n"
+                "Written from scratch\n\n"
+                VERSION
+                "Author: Dogan C. Karatas\n"
+                "Release Date: "
+                RELEASE_DATE);
     qm->exec();
-}
-
-int MainWindow::getFirstTabIdFromName(QTabWidget *qtw, std::string name)
-{
-    for(int i = 0; i < qtw->count(); i++) {
-        if(name == qtw->tabText(i).toStdString()) {
-            return i;
-        }
-    }
-    return -1;
 }
 
 MainWindow::~MainWindow()

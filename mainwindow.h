@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#define RELEASE_DATE    "12/01/2018\n"
+#define VERSION         "v1.0\n"
 
 namespace Ui {
 class MainWindow;
