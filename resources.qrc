@@ -8,5 +8,10 @@
         <file>res/icons/exit.png</file>
         <file>res/icons/saveall.png</file>
         <file>res/icons/print.png</file>
+        <file>res/icons/undo.png</file>
+        <file>res/icons/redo.png</file>
+        <file>res/icons/cut.png</file>
+        <file>res/icons/copy.png</file>
+        <file>res/icons/paste.png</file>
     </qresource>
 </RCC>
