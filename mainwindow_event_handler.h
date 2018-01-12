@@ -1,0 +1,9 @@
+#ifndef MAINWINDOW_EVENT_HANDLER
+#define MAINWINDOW_EVENT_HANDLER
+
+namespace Ui{
+
+}
+
+#endif // MAINWINDOW_EVENT_HANDLER
+

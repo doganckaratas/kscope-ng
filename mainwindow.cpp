@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "mainwindow_event_handler.h"
 #include <QMessageBox>
 #include <QTabWidget>
 #include <QTextEdit>
@@ -9,7 +10,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->setupUi(this);
     MainWindow::setWindowTitle(QString::fromStdString("KScope-NG - ") +
                                QString::fromStdString(VERSION));
-    // remove above line from production release
+    /*
+     *  remove above line from production release
+     */
     setupSignals();
     setIconStates(false);
 }
@@ -26,6 +29,9 @@ void MainWindow::setupSignals()
 
 void MainWindow::setIconStates(bool state)
 {
+    /*
+     * TODO: not all actions needed to be enabled. arrange it
+     */
     if (state == false) {
         ui->actionClose->setEnabled(false);
         ui->actionSave->setEnabled(false);
@@ -34,10 +40,22 @@ void MainWindow::setIconStates(bool state)
         ui->actionSelect_All->setEnabled(false);
         ui->actionCut->setEnabled(false);
         ui->actionCopy->setEnabled(false);
+        ui->actionCopy_As_HTML->setEnabled(false);
         ui->actionPaste->setEnabled(false);
         ui->actionPrint->setEnabled(false);
         ui->actionUndo->setEnabled(false);
         ui->actionRedo->setEnabled(false);
+        ui->actionDeselect->setEnabled(false);
+        ui->actionBlock_Selection->setEnabled(false);
+        ui->actionOverwrite_Mode->setEnabled(false);
+        ui->actionReload->setEnabled(false);
+        ui->actionExport_as_HTML->setEnabled(false);
+        ui->actionFind->setEnabled(false);
+        ui->actionFind_Next->setEnabled(false);
+        ui->actionFind_Previous->setEnabled(false);
+        ui->actionReplace->setEnabled(false);
+        ui->actionEnlarge_Font->setEnabled(false);
+        ui->actionShrink_Font->setEnabled(false);
     } else {
         ui->actionClose->setEnabled(true);
         ui->actionSave->setEnabled(true);
@@ -46,10 +64,22 @@ void MainWindow::setIconStates(bool state)
         ui->actionSelect_All->setEnabled(true);
         ui->actionCut->setEnabled(true);
         ui->actionCopy->setEnabled(true);
+        ui->actionCopy_As_HTML->setEnabled(true);
         ui->actionPaste->setEnabled(true);
         ui->actionPrint->setEnabled(true);
         ui->actionUndo->setEnabled(true);
         ui->actionRedo->setEnabled(true);
+        ui->actionDeselect->setEnabled(true);
+        ui->actionBlock_Selection->setEnabled(true);
+        ui->actionOverwrite_Mode->setEnabled(true);
+        ui->actionReload->setEnabled(true);
+        ui->actionExport_as_HTML->setEnabled(true);
+        ui->actionFind->setEnabled(true);
+        ui->actionFind_Next->setEnabled(true);
+        ui->actionFind_Previous->setEnabled(true);
+        ui->actionReplace->setEnabled(true);
+        ui->actionEnlarge_Font->setEnabled(true);
+        ui->actionShrink_Font->setEnabled(true);
     }
 }
 
@@ -95,7 +125,10 @@ void MainWindow::closeFile(const int& index)
     if (index == -1) {
         return;
     }
-    ui->tabWidget->widget(index)->deleteLater(); // MEMORY LEAK, delete tab content  & document too.
+    ui->tabWidget->widget(index)->deleteLater();
+    /*
+     * MEMORY LEAK, delete tab content  & document too.
+     */
     if (ui->tabWidget->count() <= 1) {
         setIconStates(false);
     }
