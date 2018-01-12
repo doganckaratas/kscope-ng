@@ -20,3 +20,6 @@ HEADERS  += mainwindow.h
 FORMS    += mainwindow.ui
 
 CONFIG   += x86 x86_64
+
+RESOURCES += \
+    resources.qrc

@@ -24,6 +24,8 @@ private slots:
     void newFile();
     void openFile();
     void saveFile();
+    void closeFile();
+    void closeFile(const int& index);
     void aboutDialog();
 };
 
