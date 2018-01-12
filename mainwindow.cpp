@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 {
     ui->setupUi(this);
     setupSignals();
+    setIconStates(false);
 }
 
 void MainWindow::setupSignals()
@@ -18,6 +19,35 @@ void MainWindow::setupSignals()
     connect(ui->actionClose, SIGNAL(triggered()), this, SLOT(closeFile()));
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(aboutDialog()));
     connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
+}
+
+void MainWindow::setIconStates(bool state)
+{
+    if (state == false) {
+        ui->actionClose->setEnabled(false);
+        ui->actionSave->setEnabled(false);
+        ui->actionSave_All->setEnabled(false);
+        ui->actionSave_As->setEnabled(false);
+        ui->actionSelect_All->setEnabled(false);
+        ui->actionCut->setEnabled(false);
+        ui->actionCopy->setEnabled(false);
+        ui->actionPaste->setEnabled(false);
+        ui->actionPrint->setEnabled(false);
+        ui->actionUndo->setEnabled(false);
+        ui->actionRedo->setEnabled(false);
+    } else {
+        ui->actionClose->setEnabled(true);
+        ui->actionSave->setEnabled(true);
+        ui->actionSave_All->setEnabled(true);
+        ui->actionSave_As->setEnabled(true);
+        ui->actionSelect_All->setEnabled(true);
+        ui->actionCut->setEnabled(true);
+        ui->actionCopy->setEnabled(true);
+        ui->actionPaste->setEnabled(true);
+        ui->actionPrint->setEnabled(true);
+        ui->actionUndo->setEnabled(true);
+        ui->actionRedo->setEnabled(true);
+    }
 }
 
 void MainWindow::newFile()
@@ -31,6 +61,7 @@ void MainWindow::newFile()
     qhbl->addWidget(qte);
     qhbl->setMargin(9);
     ui->tabWidget->addTab(qtw, QString::fromStdString("New File"));
+    setIconStates(true);
     statusBar()->showMessage("New File");
 }
 
@@ -51,16 +82,23 @@ void MainWindow::closeFile(const int& index)
     if (index == -1) {
         return;
     }
-
-    QWidget* tabItem = ui->tabWidget->widget(index);
-    ui->tabWidget->removeTab(index);
-    delete(tabItem);
-    tabItem = NULL;
+    ui->tabWidget->widget(index)->deleteLater(); // MEMORY LEAK, delete tab content  & document too.
+    if (ui->tabWidget->count() <= 1) {
+        setIconStates(false);
+    }
 }
 
 void MainWindow::closeFile()
 {
     statusBar()->showMessage("Close File single inst");
+    int idx = ui->tabWidget->currentIndex();
+    if (idx == -1) {
+        return;
+    }
+    ui->tabWidget->widget(idx)->deleteLater();
+    if (ui->tabWidget->count() <= 1) {
+        setIconStates(false);
+    }
 }
 
 void MainWindow::aboutDialog()
