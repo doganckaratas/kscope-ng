@@ -21,6 +21,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    int tabIdx;
     int getFirstTabIdFromName(QTabWidget *qtw, std::string name);
     void setupSignals();
     void setIconStates(bool state);

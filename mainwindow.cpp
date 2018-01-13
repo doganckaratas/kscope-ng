@@ -1,9 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "mainwindow_event_handler.h"
+#include <iostream>
 #include <QMessageBox>
 #include <QTabWidget>
 #include <QTextEdit>
+#include <QFile>
+#include <QTextStream>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -13,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     /*
      *  remove above line from production release
      */
+    tabIdx = 1;
     setupSignals();
     setIconStates(false);
 }
@@ -25,6 +29,9 @@ void MainWindow::setupSignals()
     connect(ui->actionClose, SIGNAL(triggered()), this, SLOT(closeFile()));
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(aboutDialog()));
     connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
+    /*
+     * TODO: set up all action handlers
+     */
 }
 
 void MainWindow::setIconStates(bool state)
@@ -98,6 +105,7 @@ void MainWindow::newFile()
     QTabWidget *qtw = new QTabWidget(this);
     QHBoxLayout *qhbl = new QHBoxLayout(qtw);
     QTextEdit *qte = new QTextEdit();
+    qte->setObjectName("tab"+QString::number(MainWindow::tabIdx++));
     qtw->setTabText(qtw->indexOf(qtw),"New File");
     qtw->setDocumentMode(true);
     connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeFile(int)));
@@ -116,6 +124,14 @@ void MainWindow::openFile()
 void MainWindow::saveFile()
 {
     statusBar()->showMessage("Save File");
+    QFile f("/Users/dogan/Desktop/test.txt");
+    if (f.open(QIODevice::ReadOnly | QIODevice::Text | QIODevice::ReadWrite)) {
+        QTextStream stream(&f);
+        QTextEdit *qte = ui->tabWidget->currentWidget()->findChild<QTextEdit *>("tab1"); // !
+        stream << qte->toPlainText();
+        //change tab text
+        f.close();
+    }
 }
 
 void MainWindow::closeFile(const int& index)
