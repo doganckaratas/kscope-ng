@@ -6,6 +6,7 @@
 #include <QTabWidget>
 #include <QTextEdit>
 #include <QFile>
+#include <QFileInfo>
 #include <QTextStream>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -105,7 +106,8 @@ void MainWindow::newFile()
     QTabWidget *qtw = new QTabWidget(this);
     QHBoxLayout *qhbl = new QHBoxLayout(qtw);
     QTextEdit *qte = new QTextEdit();
-    qte->setObjectName("tab"+QString::number(MainWindow::tabIdx++));
+    qte->setObjectName("editor"); //textview name
+    qtw->setObjectName("tabs");
     qtw->setTabText(qtw->indexOf(qtw),"New File");
     qtw->setDocumentMode(true);
     connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeFile(int)));
@@ -127,7 +129,9 @@ void MainWindow::saveFile()
     QFile f("/Users/dogan/Desktop/test.txt");
     if (f.open(QIODevice::ReadOnly | QIODevice::Text | QIODevice::ReadWrite)) {
         QTextStream stream(&f);
-        QTextEdit *qte = ui->tabWidget->currentWidget()->findChild<QTextEdit *>("tab1"); // !
+        QFileInfo finfo(f);
+        QTextEdit *qte = ui->tabWidget->currentWidget()->findChild<QTextEdit *>("editor"); // !
+        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), finfo.fileName());
         stream << qte->toPlainText();
         //change tab text
         f.close();
