@@ -129,15 +129,22 @@ void MainWindow::saveFile()
     statusBar()->showMessage("Save File");
     QString fname = QFileDialog::getSaveFileName(this,
                                                     "Save File", "",
-                                                    "Text File (*.txt);;C++ File (*.cpp *.h)");
-    QFile f(fname);
-    if (f.open(QIODevice::ReadOnly | QIODevice::Text | QIODevice::ReadWrite)) {
-        QTextStream stream(&f);
-        QFileInfo finfo(f);
-        QTextEdit *qte = ui->tabWidget->currentWidget()->findChild<QTextEdit *>("editor"); // !
-        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), finfo.fileName());
-        stream << qte->toPlainText();
-        f.close();
+                                                    "Text File (*.txt);;"
+                                                    "C File (*.c *.h);;"
+                                                    "C++ File (*.cpp *.h)");
+    if (fname != "")
+    {
+        QFile f(fname);
+        if (f.open(QIODevice::ReadOnly | QIODevice::Text | QIODevice::ReadWrite)) {
+            QTextStream stream(&f);
+            QFileInfo finfo(f);
+            QTextEdit *qte = ui->tabWidget->currentWidget()->findChild<QTextEdit *>("editor"); // !
+            ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), finfo.fileName());
+            stream << qte->toPlainText();
+            f.close();
+        }
+    } else {
+        statusBar()->showMessage("Save Canceled.");
     }
 }
 
