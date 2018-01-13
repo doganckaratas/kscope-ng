@@ -7,6 +7,7 @@
 #include <QTextEdit>
 #include <QFile>
 #include <QFileInfo>
+#include <QFileDialog>
 #include <QTextStream>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -126,14 +127,16 @@ void MainWindow::openFile()
 void MainWindow::saveFile()
 {
     statusBar()->showMessage("Save File");
-    QFile f("/Users/dogan/Desktop/test.txt");
+    QString fname = QFileDialog::getSaveFileName(this,
+                                                    "Save File", "",
+                                                    "Text File (*.txt);;C++ File (*.cpp *.h)");
+    QFile f(fname);
     if (f.open(QIODevice::ReadOnly | QIODevice::Text | QIODevice::ReadWrite)) {
         QTextStream stream(&f);
         QFileInfo finfo(f);
         QTextEdit *qte = ui->tabWidget->currentWidget()->findChild<QTextEdit *>("editor"); // !
         ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), finfo.fileName());
         stream << qte->toPlainText();
-        //change tab text
         f.close();
     }
 }
