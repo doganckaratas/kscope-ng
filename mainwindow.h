@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <highlighter.h>
 
 #define RELEASE_DATE    "12/01/2018\n"
 #define VERSION         "v0.2_PRE_RELEASE"
@@ -22,6 +23,7 @@ public:
 private:
     Ui::MainWindow *ui;
     int tabIdx;
+    Highlighter *highlighter;
     int getFirstTabIdFromName(QTabWidget *qtw, std::string name);
     void setupSignals();
     void setIconStates(bool state);

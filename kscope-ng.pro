@@ -14,10 +14,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    mainwindow_event_handler.cpp
+    mainwindow_event_handler.cpp \
+    highlighter.cpp
 
 HEADERS  += mainwindow.h \
-    mainwindow_event_handler.h
+    mainwindow_event_handler.h \
+    highlighter.h
 
 FORMS    += mainwindow.ui
 

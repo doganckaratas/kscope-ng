@@ -107,6 +107,7 @@ void MainWindow::newFile()
     QTabWidget *qtw = new QTabWidget(this);
     QHBoxLayout *qhbl = new QHBoxLayout(qtw);
     QTextEdit *qte = new QTextEdit();
+    highlighter = new Highlighter(qte->document());
     qte->setObjectName("editor"); //textview name
     qtw->setObjectName("tabs");
     qtw->setTabText(qtw->indexOf(qtw),"New File");
