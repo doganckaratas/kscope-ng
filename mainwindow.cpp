@@ -104,6 +104,8 @@ int MainWindow::getFirstTabIdFromName(QTabWidget *qtw, std::string name)
 
 void MainWindow::newFile()
 {
+    /* TODO: Refactor this method */
+
     QTabWidget *qtw = new QTabWidget(this);
     QHBoxLayout *qhbl = new QHBoxLayout(qtw);
     QTextEdit *qte = new QTextEdit();
@@ -122,15 +124,40 @@ void MainWindow::newFile()
 
 void MainWindow::openFile()
 {
+    /* TODO: Refactor this method */
+
     statusBar()->showMessage("Open File");
+    QString fname = QFileDialog::getOpenFileName(this,
+                                                 "Open File", "",
+                                                 "Text File (*.txt);;"
+                                                 "Makefile (Makefile);;"
+                                                 "C File (*.c *.h);;"
+                                                 "C++ File (*.cpp *.h)");
+    if (fname != "") {
+        QFile f(fname);
+        if (f.open((QIODevice::ReadOnly | QIODevice::Text | QIODevice::ReadWrite))) {
+            MainWindow::newFile();
+            QTextStream stream(&f);
+            QFileInfo finfo(f);
+            QTextEdit *qte = ui->tabWidget->currentWidget()->findChild<QTextEdit *>("editor");
+            ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), finfo.fileName());
+            while (!stream.atEnd()) {
+               QString line = stream.readLine();
+               qte->append( line );
+            }
+        }
+    }
 }
 
 void MainWindow::saveFile()
 {
+    /* TODO: Refactor this method */
+
     statusBar()->showMessage("Save File");
     QString fname = QFileDialog::getSaveFileName(this,
                                                     "Save File", "",
                                                     "Text File (*.txt);;"
+                                                    "Makefile (Makefile);;"
                                                     "C File (*.c *.h);;"
                                                     "C++ File (*.cpp *.h)");
     if (fname != "")

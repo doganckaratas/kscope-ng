@@ -4,6 +4,10 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent)
 {
     HighlightingRule rule;
 
+    /* TODO: Add Preprocessor highligher, remove them from keywordlist
+     * Implement dynamic symbol adder
+     */
+
     keywordFormat.setForeground(Qt::darkBlue);
     keywordFormat.setFontWeight(QFont::Bold);
     QStringList keywordPatterns;
