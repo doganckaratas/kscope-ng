@@ -129,6 +129,7 @@ void MainWindow::openFile()
     statusBar()->showMessage("Open File");
     QString fname = QFileDialog::getOpenFileName(this,
                                                  "Open File", "",
+                                                 "All Files (*.*);;"
                                                  "Text File (*.txt);;"
                                                  "Makefile (Makefile);;"
                                                  "C File (*.c *.h);;"
@@ -156,6 +157,7 @@ void MainWindow::saveFile()
     statusBar()->showMessage("Save File");
     QString fname = QFileDialog::getSaveFileName(this,
                                                     "Save File", "",
+                                                    "All Files (*.*);;"
                                                     "Text File (*.txt);;"
                                                     "Makefile (Makefile);;"
                                                     "C File (*.c *.h);;"
