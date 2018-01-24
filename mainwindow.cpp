@@ -118,6 +118,7 @@ void MainWindow::newFile()
     qhbl->addWidget(qte);
     qhbl->setMargin(9);
     ui->tabWidget->addTab(qtw, QString::fromStdString("New File"));
+    ui->tabWidget->setCurrentWidget(qtw);
     setIconStates(true);
     statusBar()->showMessage("New File");
 }
