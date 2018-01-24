@@ -1,3 +1,11 @@
+/**
+ * @brief kscope-ng
+ * A Qt based C/C++ IDE Project
+ * @author Dogan C. Karatas
+ * @date 2018
+ * @file events.h
+ */
+
 #ifndef MAINWINDOW_EVENT_HANDLER
 #define MAINWINDOW_EVENT_HANDLER
 
@@ -9,10 +17,6 @@ class MainWindow;
 
 class Events
 {
-
-public:
-
-private:
 
 private slots:
     void newFile();

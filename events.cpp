@@ -1,3 +1,11 @@
+/**
+ * @brief kscope-ng
+ * A Qt based C/C++ IDE Project
+ * @author Dogan C. Karatas
+ * @date 2018
+ * @file events.cpp
+ */
+
 #include <QMessageBox>
 #include <QTabWidget>
 #include <QTextEdit>
@@ -12,9 +20,14 @@
 
 #include <iostream>
 
-/*
- * TODO: Move event handlers from mainwindow.cpp to here
- *       Also edit makefile to compile this source
+/** @todo Move event handlers from mainwindow.cpp to here [DONE]
+ *  @todo Also edit makefile to compile this source       [DONE]
+ *  @todo Add Line Numbering
+ *  @todo Add Custom highlighters
+ *  @todo Add Multithreaded preprocessor for highlighter
+ *  @todo Add Find&Replace
+ *  @todo Add CScope wrapper
+ *  @todo Refactor marked methods
  */
 
 void MainWindow::newFile()

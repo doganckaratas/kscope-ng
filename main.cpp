@@ -1,3 +1,11 @@
+/**
+ * @brief kscope-ng
+ * A Qt based C/C++ IDE Project
+ * @author Dogan C. Karatas
+ * @date 2018
+ * @file main.cpp
+ */
+
 #include "mainwindow.h"
 #include <QApplication>
 
