@@ -4,8 +4,8 @@
 #include <QMainWindow>
 #include <highlighter.h>
 
-#define RELEASE_DATE    "12/01/2018\n"
-#define VERSION         "v0.2_PRE_RELEASE"
+#define RELEASE_DATE    "24/01/2018\n"
+#define VERSION         "v0.3_PRE_RELEASE"
 #define VER_STR         VERSION"\n"
 
 namespace Ui {
