@@ -11,19 +11,15 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = kscope-ng
 TEMPLATE = app
 
+SOURCES +=  ./src/core/main.cpp \
+            ./src/core/mainwindow.cpp \
+            ./src/core/highlighter.cpp
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
-    highlighter.cpp \
-    events.cpp
+HEADERS  += ./src/include/mainwindow.h \
+            ./src/include/highlighter.h
 
-HEADERS  += mainwindow.h \
-    highlighter.h \
-    events.h
+FORMS    += ./src/view/mainwindow.ui
 
-FORMS    += mainwindow.ui
+RESOURCES += ./res/resources.qrc
 
 CONFIG   += x86 x86_64
-
-RESOURCES += \
-    resources.qrc

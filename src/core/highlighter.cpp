@@ -6,7 +6,7 @@
  * @file highlighter.cpp
  */
 
-#include "highlighter.h"
+#include "../include/highlighter.h"
 
 Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent)
 {
