@@ -13,7 +13,7 @@
 #include "highlighter.h"
 
 #define RELEASE_DATE    "24/01/2018\n"
-#define VERSION         "v0.3_PRE_RELEASE"
+#define VERSION         "v0.4_PRE_RELEASE"
 #define VER_STR         VERSION"\n"
 
 namespace Ui {
@@ -42,6 +42,9 @@ private slots:
     void saveFile();
     void closeFile();
     void closeFile(const int& index);
+    void toggleSymbols();
+    void toggleCscope();
+    void toggleFiles();
     void aboutDialog();
 };
 

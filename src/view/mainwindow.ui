@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>1150</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuEdit">
@@ -183,6 +183,9 @@
    <addaction name="actionEnlarge_Font"/>
    <addaction name="actionShrink_Font"/>
    <addaction name="separator"/>
+   <addaction name="actionToggleSymbols"/>
+   <addaction name="actionToggleCscope"/>
+   <addaction name="actionToggleFiles"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="dockCscope">
@@ -589,9 +592,19 @@
     <string>Ctrl+Space</string>
    </property>
   </action>
-  <action name="actionSet">
+  <action name="actionToggleSymbols">
    <property name="text">
-    <string>Set</string>
+    <string>Toggle Symbols</string>
+   </property>
+  </action>
+  <action name="actionToggleCscope">
+   <property name="text">
+    <string>Toggle CScope</string>
+   </property>
+  </action>
+  <action name="actionToggleFiles">
+   <property name="text">
+    <string>Toggle Files</string>
    </property>
   </action>
  </widget>

@@ -42,6 +42,9 @@ void MainWindow::setupSignals()
     connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(saveFile()));
     connect(ui->actionClose, SIGNAL(triggered()), this, SLOT(closeFile()));
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(aboutDialog()));
+    connect(ui->actionToggleSymbols, SIGNAL(triggered()), this, SLOT(toggleSymbols()));
+    connect(ui->actionToggleCscope, SIGNAL(triggered()), this, SLOT(toggleCscope()));
+    connect(ui->actionToggleFiles, SIGNAL(triggered()), this, SLOT(toggleFiles()));
     connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
     /*
      * TODO: set up all action handlers
@@ -103,7 +106,6 @@ void MainWindow::setIconStates(bool state)
         ui->actionShrink_Font->setEnabled(true);
     }
 }
-
 
 void MainWindow::newFile()
 {
@@ -209,6 +211,30 @@ void MainWindow::closeFile()
     if (ui->tabWidget->count() <= 1) {
         setIconStates(false);
     }
+}
+
+void MainWindow::toggleSymbols()
+{
+    if(ui->dockSymbols->isVisible() == true)
+        ui->dockSymbols->close();
+    else
+        ui->dockSymbols->show();
+}
+
+void MainWindow::toggleCscope()
+{
+    if(ui->dockCscope->isVisible() == true)
+        ui->dockCscope->close();
+    else
+        ui->dockCscope->show();
+}
+
+void MainWindow::toggleFiles()
+{
+    if(ui->dockFiles->isVisible() == true)
+        ui->dockFiles->close();
+    else
+        ui->dockFiles->show();
 }
 
 void MainWindow::aboutDialog()
