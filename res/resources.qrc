@@ -21,5 +21,8 @@
         <file>icons/saveall.png</file>
         <file>icons/saveas.png</file>
         <file>icons/undo.png</file>
+        <file>icons/querywindow.png</file>
+        <file>icons/taglist.png</file>
+        <file>icons/filelist.png</file>
     </qresource>
 </RCC>

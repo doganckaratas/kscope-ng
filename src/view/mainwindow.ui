@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>1150</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuEdit">
@@ -593,16 +593,28 @@
    </property>
   </action>
   <action name="actionToggleSymbols">
+   <property name="icon">
+    <iconset resource="../../res/resources.qrc">
+     <normaloff>:/icons/icons/taglist.png</normaloff>:/icons/icons/taglist.png</iconset>
+   </property>
    <property name="text">
     <string>Toggle Symbols</string>
    </property>
   </action>
   <action name="actionToggleCscope">
+   <property name="icon">
+    <iconset resource="../../res/resources.qrc">
+     <normaloff>:/icons/icons/querywindow.png</normaloff>:/icons/icons/querywindow.png</iconset>
+   </property>
    <property name="text">
     <string>Toggle CScope</string>
    </property>
   </action>
   <action name="actionToggleFiles">
+   <property name="icon">
+    <iconset resource="../../res/resources.qrc">
+     <normaloff>:/icons/icons/filelist.png</normaloff>:/icons/icons/filelist.png</iconset>
+   </property>
    <property name="text">
     <string>Toggle Files</string>
    </property>
