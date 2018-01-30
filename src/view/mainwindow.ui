@@ -100,6 +100,9 @@
     <property name="title">
      <string>View</string>
     </property>
+    <addaction name="actionToggleFiles"/>
+    <addaction name="actionToggleCscope"/>
+    <addaction name="actionToggleSymbols"/>
    </widget>
    <widget class="QMenu" name="menuProject">
     <property name="title">
@@ -182,10 +185,6 @@
    <addaction name="actionFind"/>
    <addaction name="actionEnlarge_Font"/>
    <addaction name="actionShrink_Font"/>
-   <addaction name="separator"/>
-   <addaction name="actionToggleSymbols"/>
-   <addaction name="actionToggleCscope"/>
-   <addaction name="actionToggleFiles"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="dockCscope">
@@ -277,6 +276,66 @@
      </item>
     </layout>
    </widget>
+  </widget>
+  <widget class="QToolBar" name="projectToolBar">
+   <property name="windowTitle">
+    <string>Project Toolbar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionOpenProject"/>
+   <addaction name="actionRebuildProject"/>
+  </widget>
+  <widget class="QToolBar" name="navigationToolBar">
+   <property name="windowTitle">
+    <string>Navigation Toolbar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionPreviousPosition"/>
+   <addaction name="actionNextPosition"/>
+   <addaction name="actionPositionHistory"/>
+   <addaction name="actionGlobalBookmarks"/>
+  </widget>
+  <widget class="QToolBar" name="queryToolBar">
+   <property name="windowTitle">
+    <string>Query Toolbar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionNewQuery"/>
+   <addaction name="actionRefreshQueries"/>
+   <addaction name="actionLock"/>
+   <addaction name="actionClose_2"/>
+   <addaction name="separator"/>
+   <addaction name="actionPrevious"/>
+   <addaction name="actionNext"/>
+  </widget>
+  <widget class="QToolBar" name="dockToolBar">
+   <property name="windowTitle">
+    <string>Workspace Toolbar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionToggleSymbols"/>
+   <addaction name="actionToggleCscope"/>
+   <addaction name="actionToggleFiles"/>
   </widget>
   <action name="actionNew">
    <property name="icon">
@@ -598,7 +657,10 @@
      <normaloff>:/icons/icons/taglist.png</normaloff>:/icons/icons/taglist.png</iconset>
    </property>
    <property name="text">
-    <string>Toggle Symbols</string>
+    <string>Toggle Tag List</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+'</string>
    </property>
   </action>
   <action name="actionToggleCscope">
@@ -607,7 +669,10 @@
      <normaloff>:/icons/icons/querywindow.png</normaloff>:/icons/icons/querywindow.png</iconset>
    </property>
    <property name="text">
-    <string>Toggle CScope</string>
+    <string>Toggle Query Window</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+.</string>
    </property>
   </action>
   <action name="actionToggleFiles">
@@ -616,7 +681,133 @@
      <normaloff>:/icons/icons/filelist.png</normaloff>:/icons/icons/filelist.png</iconset>
    </property>
    <property name="text">
-    <string>Toggle Files</string>
+    <string>Toggle File List</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+/</string>
+   </property>
+  </action>
+  <action name="actionOpenProject">
+   <property name="icon">
+    <iconset resource="../../res/resources.qrc">
+     <normaloff>:/icons/icons/project_open.png</normaloff>:/icons/icons/project_open.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open Project</string>
+   </property>
+   <property name="toolTip">
+    <string>Open Project</string>
+   </property>
+  </action>
+  <action name="actionRebuildProject">
+   <property name="icon">
+    <iconset resource="../../res/resources.qrc">
+     <normaloff>:/icons/icons/rebuild.png</normaloff>:/icons/icons/rebuild.png</iconset>
+   </property>
+   <property name="text">
+    <string>Rebuild Project</string>
+   </property>
+   <property name="toolTip">
+    <string>Rebuild Project</string>
+   </property>
+  </action>
+  <action name="actionPreviousPosition">
+   <property name="icon">
+    <iconset resource="../../res/resources.qrc">
+     <normaloff>:/icons/icons/back.png</normaloff>:/icons/icons/back.png</iconset>
+   </property>
+   <property name="text">
+    <string>Previous Position</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+Left</string>
+   </property>
+  </action>
+  <action name="actionNextPosition">
+   <property name="icon">
+    <iconset resource="../../res/resources.qrc">
+     <normaloff>:/icons/icons/forward.png</normaloff>:/icons/icons/forward.png</iconset>
+   </property>
+   <property name="text">
+    <string>Next Position</string>
+   </property>
+   <property name="toolTip">
+    <string>Next Position</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+Right</string>
+   </property>
+  </action>
+  <action name="actionGlobalBookmarks">
+   <property name="icon">
+    <iconset resource="../../res/resources.qrc">
+     <normaloff>:/icons/icons/bookmark.png</normaloff>:/icons/icons/bookmark.png</iconset>
+   </property>
+   <property name="text">
+    <string>Global Bookmarks</string>
+   </property>
+  </action>
+  <action name="actionPositionHistory">
+   <property name="icon">
+    <iconset resource="../../res/resources.qrc">
+     <normaloff>:/icons/icons/history.png</normaloff>:/icons/icons/history.png</iconset>
+   </property>
+   <property name="text">
+    <string>Position History</string>
+   </property>
+  </action>
+  <action name="actionNewQuery">
+   <property name="icon">
+    <iconset resource="../../res/resources.qrc">
+     <normaloff>:/icons/icons/new.png</normaloff>:/icons/icons/new.png</iconset>
+   </property>
+   <property name="text">
+    <string>New Query</string>
+   </property>
+  </action>
+  <action name="actionRefreshQueries">
+   <property name="icon">
+    <iconset resource="../../res/resources.qrc">
+     <normaloff>:/icons/icons/reload.png</normaloff>:/icons/icons/reload.png</iconset>
+   </property>
+   <property name="text">
+    <string>RefreshQueries</string>
+   </property>
+  </action>
+  <action name="actionLock">
+   <property name="icon">
+    <iconset resource="../../res/resources.qrc">
+     <normaloff>:/icons/icons/lock.png</normaloff>:/icons/icons/lock.png</iconset>
+   </property>
+   <property name="text">
+    <string>Lock Query</string>
+   </property>
+  </action>
+  <action name="actionClose_2">
+   <property name="icon">
+    <iconset resource="../../res/resources.qrc">
+     <normaloff>:/icons/icons/close.png</normaloff>:/icons/icons/close.png</iconset>
+   </property>
+   <property name="text">
+    <string>Close Query</string>
+   </property>
+  </action>
+  <action name="actionPrevious">
+   <property name="icon">
+    <iconset resource="../../res/resources.qrc">
+     <normaloff>:/icons/icons/up.png</normaloff>:/icons/icons/up.png</iconset>
+   </property>
+   <property name="text">
+    <string>Previous Result</string>
+   </property>
+  </action>
+  <action name="actionNext">
+   <property name="icon">
+    <iconset resource="../../res/resources.qrc">
+     <normaloff>:/icons/icons/down.png</normaloff>:/icons/icons/down.png</iconset>
+   </property>
+   <property name="text">
+    <string>Next Result</string>
    </property>
   </action>
  </widget>

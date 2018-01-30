@@ -24,5 +24,13 @@
         <file>icons/querywindow.png</file>
         <file>icons/taglist.png</file>
         <file>icons/filelist.png</file>
+        <file>icons/project_open.png</file>
+        <file>icons/rebuild.png</file>
+        <file>icons/down.png</file>
+        <file>icons/up.png</file>
+        <file>icons/bookmark.png</file>
+        <file>icons/history.png</file>
+        <file>icons/unlock.png</file>
+        <file>icons/lock.png</file>
     </qresource>
 </RCC>
