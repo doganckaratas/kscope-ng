@@ -4,8 +4,11 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
 
+include(./src/editor/qscintilla.pri)
+
+kscope {
+QT       += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = kscope-ng
@@ -23,3 +26,6 @@ FORMS    += ./src/view/mainwindow.ui
 RESOURCES += ./res/resources.qrc
 
 CONFIG   += x86 x86_64
+}
+
+CONFIG   += qscintilla kscope
