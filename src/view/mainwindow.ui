@@ -75,6 +75,7 @@
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionContents"/>
     <addaction name="actionAbout"/>
    </widget>
    <widget class="QMenu" name="menuFile">
@@ -100,29 +101,101 @@
     <property name="title">
      <string>View</string>
     </property>
+    <widget class="QMenu" name="menuSchema">
+     <property name="title">
+      <string>Schema</string>
+     </property>
+     <addaction name="actionNormal"/>
+     <addaction name="actionPrinting"/>
+    </widget>
+    <widget class="QMenu" name="menuDynamic_Word_Wrap_Indicators">
+     <property name="title">
+      <string>Dynamic Word Wrap Indicators</string>
+     </property>
+     <addaction name="actionOff"/>
+     <addaction name="actionFollow_Line_Numbers"/>
+     <addaction name="actionAuto"/>
+    </widget>
+    <widget class="QMenu" name="menuCode_Folding">
+     <property name="title">
+      <string>Code Folding</string>
+     </property>
+     <addaction name="actionCollapse_Top_Level"/>
+     <addaction name="actionExpand_Top_Level"/>
+     <addaction name="actionCollapse_One_Local_Level"/>
+     <addaction name="actionExpand_One_Local_Level"/>
+    </widget>
     <addaction name="actionToggleFiles"/>
     <addaction name="actionToggleCscope"/>
     <addaction name="actionToggleSymbols"/>
+    <addaction name="separator"/>
+    <addaction name="actionSwitch_to_Command_Line"/>
+    <addaction name="menuSchema"/>
+    <addaction name="separator"/>
+    <addaction name="actionDynamic_Word_Wrap"/>
+    <addaction name="menuDynamic_Word_Wrap_Indicators"/>
+    <addaction name="actionShow_Static_Word_Wrap_Marker"/>
+    <addaction name="separator"/>
+    <addaction name="actionHide_Icon_Border"/>
+    <addaction name="actionHide_Line_Numbers"/>
+    <addaction name="actionHide_Scrollbar_Marks"/>
+    <addaction name="separator"/>
+    <addaction name="actionHide_Folding_Markers"/>
+    <addaction name="separator"/>
+    <addaction name="menuCode_Folding"/>
    </widget>
    <widget class="QMenu" name="menuProject">
     <property name="title">
      <string>Project</string>
     </property>
+    <addaction name="actionNew_Project"/>
+    <addaction name="actionOpenProject"/>
+    <addaction name="actionOpen_CScope_out"/>
+    <addaction name="actionAdd_Remove_Files"/>
+    <addaction name="actionProperties"/>
+    <addaction name="separator"/>
+    <addaction name="actionMake_Project"/>
+    <addaction name="actionRemake_Project"/>
+    <addaction name="separator"/>
+    <addaction name="actionClose_Project"/>
    </widget>
    <widget class="QMenu" name="menuCscope">
     <property name="title">
      <string>Cscope</string>
     </property>
+    <addaction name="actionRebuild_Database"/>
+    <addaction name="separator"/>
+    <addaction name="actionReferences"/>
+    <addaction name="actionDefinition"/>
+    <addaction name="actionCalled_Functions"/>
+    <addaction name="actionCalling_Functions"/>
+    <addaction name="actionFind_Text"/>
+    <addaction name="actionFind_EGrep_Pattern"/>
+    <addaction name="actionFind_File"/>
+    <addaction name="actionIncluding_Files"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuick_Definition"/>
+    <addaction name="actionCall_Graph"/>
    </widget>
    <widget class="QMenu" name="menuGo">
     <property name="title">
      <string>Go</string>
     </property>
+    <addaction name="actionPrevious"/>
+    <addaction name="actionNext"/>
+    <addaction name="separator"/>
+    <addaction name="actionPreviousPosition"/>
+    <addaction name="actionNextPosition"/>
+    <addaction name="actionPositionHistory"/>
+    <addaction name="separator"/>
+    <addaction name="actionGlobalBookmarks"/>
    </widget>
    <widget class="QMenu" name="menuBookmarks">
     <property name="title">
      <string>Bookmarks</string>
     </property>
+    <addaction name="actionSet_Bookmark"/>
+    <addaction name="actionClear_All_Bookmarks"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -133,11 +206,30 @@
     <property name="title">
      <string>Windows</string>
     </property>
+    <addaction name="actionClose_All"/>
+    <addaction name="actionGo_Left"/>
+    <addaction name="actionGo_Right"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuSettings">
     <property name="title">
      <string>Settings</string>
     </property>
+    <widget class="QMenu" name="menuToolbars">
+     <property name="title">
+      <string>Toolbars</string>
+     </property>
+     <addaction name="actionMain_Toolbar"/>
+     <addaction name="actionProject"/>
+     <addaction name="actionNavigation"/>
+     <addaction name="actionQuery"/>
+     <addaction name="actionWorkspace"/>
+     <addaction name="actionSearch_Toolbar"/>
+    </widget>
+    <addaction name="actionConfigure_Editor"/>
+    <addaction name="menuToolbars"/>
+    <addaction name="actionConfigure_Shortcuts"/>
+    <addaction name="actionConfigure_IDE"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -808,6 +900,311 @@
    </property>
    <property name="text">
     <string>Next Result</string>
+   </property>
+  </action>
+  <action name="actionSwitch_to_Command_Line">
+   <property name="text">
+    <string>Switch to Command Line</string>
+   </property>
+   <property name="shortcut">
+    <string>F7</string>
+   </property>
+  </action>
+  <action name="actionNormal">
+   <property name="text">
+    <string>Normal</string>
+   </property>
+  </action>
+  <action name="actionPrinting">
+   <property name="text">
+    <string>Printing</string>
+   </property>
+  </action>
+  <action name="actionDynamic_Word_Wrap">
+   <property name="text">
+    <string>Dynamic Word Wrap</string>
+   </property>
+   <property name="shortcut">
+    <string>F10</string>
+   </property>
+  </action>
+  <action name="actionOff">
+   <property name="text">
+    <string>Off</string>
+   </property>
+  </action>
+  <action name="actionFollow_Line_Numbers">
+   <property name="text">
+    <string>Follow Line Numbers</string>
+   </property>
+  </action>
+  <action name="actionAuto">
+   <property name="text">
+    <string>Auto</string>
+   </property>
+  </action>
+  <action name="actionShow_Static_Word_Wrap_Marker">
+   <property name="text">
+    <string>Show Static Word Wrap Marker</string>
+   </property>
+  </action>
+  <action name="actionHide_Icon_Border">
+   <property name="text">
+    <string>Hide Icon Border</string>
+   </property>
+   <property name="shortcut">
+    <string>F6</string>
+   </property>
+  </action>
+  <action name="actionHide_Line_Numbers">
+   <property name="text">
+    <string>Hide Line Numbers</string>
+   </property>
+   <property name="shortcut">
+    <string>F11</string>
+   </property>
+  </action>
+  <action name="actionHide_Scrollbar_Marks">
+   <property name="text">
+    <string>Hide Scroll Marks</string>
+   </property>
+   <property name="toolTip">
+    <string>Hide Scrollbar Marks</string>
+   </property>
+  </action>
+  <action name="actionHide_Folding_Markers">
+   <property name="text">
+    <string>Hide Folding Markers</string>
+   </property>
+   <property name="shortcut">
+    <string>F9</string>
+   </property>
+  </action>
+  <action name="actionCollapse_Top_Level">
+   <property name="text">
+    <string>Collapse Top Level</string>
+   </property>
+  </action>
+  <action name="actionExpand_Top_Level">
+   <property name="text">
+    <string>Expand Top Level</string>
+   </property>
+  </action>
+  <action name="actionCollapse_One_Local_Level">
+   <property name="text">
+    <string>Collapse One Local Level</string>
+   </property>
+  </action>
+  <action name="actionExpand_One_Local_Level">
+   <property name="text">
+    <string>Expand One Local Level</string>
+   </property>
+  </action>
+  <action name="actionNew_Project">
+   <property name="text">
+    <string>New Project</string>
+   </property>
+  </action>
+  <action name="actionOpen_CScope_out">
+   <property name="text">
+    <string>Open CScope.out</string>
+   </property>
+  </action>
+  <action name="actionAdd_Remove_Files">
+   <property name="text">
+    <string>Add/Remove Files</string>
+   </property>
+  </action>
+  <action name="actionProperties">
+   <property name="text">
+    <string>Properties</string>
+   </property>
+  </action>
+  <action name="actionMake_Project">
+   <property name="text">
+    <string>Make Project</string>
+   </property>
+  </action>
+  <action name="actionRemake_Project">
+   <property name="text">
+    <string>Remake Project</string>
+   </property>
+  </action>
+  <action name="actionClose_Project">
+   <property name="text">
+    <string>Close Project</string>
+   </property>
+  </action>
+  <action name="actionRebuild_Database">
+   <property name="text">
+    <string>Rebuild Database</string>
+   </property>
+  </action>
+  <action name="actionReferences">
+   <property name="text">
+    <string>References</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+0</string>
+   </property>
+  </action>
+  <action name="actionDefinition">
+   <property name="text">
+    <string>Definition</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+1</string>
+   </property>
+  </action>
+  <action name="actionCalled_Functions">
+   <property name="text">
+    <string>Called Functions</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+2</string>
+   </property>
+  </action>
+  <action name="actionCalling_Functions">
+   <property name="text">
+    <string>Calling Functions</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+3</string>
+   </property>
+  </action>
+  <action name="actionFind_Text">
+   <property name="text">
+    <string>Find Text</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+4</string>
+   </property>
+  </action>
+  <action name="actionFind_EGrep_Pattern">
+   <property name="text">
+    <string>Find EGrep Pattern</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+5</string>
+   </property>
+  </action>
+  <action name="actionFind_File">
+   <property name="text">
+    <string>Find File</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+7</string>
+   </property>
+  </action>
+  <action name="actionIncluding_Files">
+   <property name="text">
+    <string>Including Files</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+8</string>
+   </property>
+  </action>
+  <action name="actionQuick_Definition">
+   <property name="text">
+    <string>Quick Definition</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+]</string>
+   </property>
+  </action>
+  <action name="actionCall_Graph">
+   <property name="text">
+    <string>Call Graph</string>
+   </property>
+   <property name="toolTip">
+    <string>Call Graph</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+\</string>
+   </property>
+  </action>
+  <action name="actionSet_Bookmark">
+   <property name="text">
+    <string>Set Bookmark</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
+   </property>
+  </action>
+  <action name="actionClear_All_Bookmarks">
+   <property name="text">
+    <string>Clear All Bookmarks</string>
+   </property>
+  </action>
+  <action name="actionConfigure_Editor">
+   <property name="text">
+    <string>Configure Editor</string>
+   </property>
+  </action>
+  <action name="actionConfigure_Shortcuts">
+   <property name="text">
+    <string>Configure Shortcuts</string>
+   </property>
+  </action>
+  <action name="actionConfigure_IDE">
+   <property name="text">
+    <string>Configure IDE</string>
+   </property>
+  </action>
+  <action name="actionMain_Toolbar">
+   <property name="text">
+    <string>Main Toolbar</string>
+   </property>
+  </action>
+  <action name="actionProject">
+   <property name="text">
+    <string>Project</string>
+   </property>
+  </action>
+  <action name="actionNavigation">
+   <property name="text">
+    <string>Navigation</string>
+   </property>
+  </action>
+  <action name="actionQuery">
+   <property name="text">
+    <string>Query</string>
+   </property>
+  </action>
+  <action name="actionWorkspace">
+   <property name="text">
+    <string>Workspace</string>
+   </property>
+  </action>
+  <action name="actionSearch_Toolbar">
+   <property name="text">
+    <string>Search Toolbar</string>
+   </property>
+  </action>
+  <action name="actionContents">
+   <property name="text">
+    <string>Contents</string>
+   </property>
+   <property name="toolTip">
+    <string>Contents</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
+  </action>
+  <action name="actionClose_All">
+   <property name="text">
+    <string>Close All</string>
+   </property>
+  </action>
+  <action name="actionGo_Left">
+   <property name="text">
+    <string>Go Left</string>
+   </property>
+  </action>
+  <action name="actionGo_Right">
+   <property name="text">
+    <string>Go Right</string>
    </property>
   </action>
  </widget>
