@@ -7,25 +7,46 @@
 
 include(./src/editor/qscintilla.pri)
 
-kscope {
 QT       += core gui
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+greaterThan(QT_MAJOR_VERSION, 4) {
+    QT += widgets printsupport
+    CONFIG += c++11
+} else {
+    QMAKE_CXXFLAGS += -std=c++11
+    CONFIG -= android_install
+}
+
+# MacOS Hack
+unix:macx {
+    QT += macextras
+}
+
+CONFIG   += x86 x86_64 qt warn_off thread exceptions
 
 TARGET = kscope-ng
+
 TEMPLATE = app
 
 SOURCES +=  ./src/core/main.cpp \
             ./src/core/mainwindow.cpp \
-            ./src/core/highlighter.cpp
+            ./src/core/highlighter.cpp \
+
 
 HEADERS  += ./src/include/mainwindow.h \
             ./src/include/highlighter.h
+
+INCLUDEPATH += \
+            ./src/editor/qscintilla \
+            ./src/editor/include \
+            ./src/editor/lexlib \
+            ./src/editor/src
+
+DEFINES += SCINTILLA_QT SCI_LEXER
 
 FORMS    += ./src/view/mainwindow.ui
 
 RESOURCES += ./res/resources.qrc
 
-CONFIG   += x86 x86_64
-}
 
-CONFIG   += qscintilla kscope
+#CONFIG   += qscintilla kscope

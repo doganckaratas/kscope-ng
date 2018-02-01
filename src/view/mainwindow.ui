@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>1150</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuEdit">
@@ -373,6 +373,12 @@
    <property name="windowTitle">
     <string>Project Toolbar</string>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>22</width>
+     <height>22</height>
+    </size>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
@@ -385,6 +391,12 @@
   <widget class="QToolBar" name="navigationToolBar">
    <property name="windowTitle">
     <string>Navigation Toolbar</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>22</width>
+     <height>22</height>
+    </size>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -400,6 +412,12 @@
   <widget class="QToolBar" name="queryToolBar">
    <property name="windowTitle">
     <string>Query Toolbar</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>22</width>
+     <height>22</height>
+    </size>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -418,6 +436,12 @@
   <widget class="QToolBar" name="dockToolBar">
    <property name="windowTitle">
     <string>Workspace Toolbar</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>22</width>
+     <height>22</height>
+    </size>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>

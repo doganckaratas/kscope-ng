@@ -1,104 +1,3 @@
-# The project file for the QScintilla library.
-#
-# Copyright (c) 2017 Riverbank Computing Limited <info@riverbankcomputing.com>
-# 
-# This file is part of QScintilla.
-# 
-# This file may be used under the terms of the GNU General Public License
-# version 3.0 as published by the Free Software Foundation and appearing in
-# the file LICENSE included in the packaging of this file.  Please review the
-# following information to ensure the GNU General Public License version 3.0
-# requirements will be met: http://www.gnu.org/copyleft/gpl.html.
-# 
-# If you do not wish to use this file under the terms of the GPL version 3.0
-# then you may purchase a commercial license.  For more information contact
-# info@riverbankcomputing.com.
-# 
-# This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-# WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-
-
-# This must be kept in sync with Python/configure.py, Python/configure-old.py,
-# example-Qt4Qt5/application.pro and designer-Qt4Qt5/designer.pro.
-qscintilla {
-!win32:VERSION = 13.1.0
-
-TEMPLATE = lib
-CONFIG += qt warn_off thread exceptions hide_symbols staticlib
-
-CONFIG(debug, debug|release) {
-    mac: {
-        TARGET = qscintilla2_qt$${QT_MAJOR_VERSION}_debug
-    } else {
-        win32: {
-            TARGET = qscintilla2_qt$${QT_MAJOR_VERSION}d
-        } else {
-            TARGET = qscintilla2_qt$${QT_MAJOR_VERSION}
-        }
-    }
-} else {
-    TARGET = qscintilla2_qt$${QT_MAJOR_VERSION}
-}
-
-INCLUDEPATH += ./src/editor/qscintilla ./src/editor/include ./src/editor/lexlib ./src/editor/src
-
-!CONFIG(staticlib) {
-    DEFINES += QSCINTILLA_MAKE_DLL
-}
-DEFINES += SCINTILLA_QT SCI_LEXER
-
-greaterThan(QT_MAJOR_VERSION, 4) {
-	QT += widgets printsupport
-
-    greaterThan(QT_MINOR_VERSION, 1) {
-	    macx:QT += macextras
-    }
-
-    # Work around QTBUG-39300.
-    CONFIG -= android_install
-}
-
-greaterThan(QT_MAJOR_VERSION, 4) {
-
-CONFIG += c++11
-} else {
-# For old versions of Qt
-
-QMAKE_CXXFLAGS += -std=c++11 
-}
-
-
-# Comment this in if you want the internal Scintilla classes to be placed in a
-# Scintilla namespace rather than pollute the global namespace.
-#DEFINES += SCI_NAMESPACE
-
-target.path = $$[QT_INSTALL_LIBS]
-INSTALLS += target
-
-header.path = $$[QT_INSTALL_HEADERS]
-header.files = Qsci
-INSTALLS += header
-
-trans.path = $$[QT_INSTALL_TRANSLATIONS]
-trans.files = qscintilla_*.qm
-INSTALLS += trans
-
-qsci.path = $$[QT_INSTALL_DATA]
-qsci.files = ./src/editor/qsci
-INSTALLS += qsci
-
-greaterThan(QT_MAJOR_VERSION, 4) {
-    features.path = $$[QT_HOST_DATA]/mkspecs/features
-} else {
-    features.path = $$[QT_INSTALL_DATA]/mkspecs/features
-}
-CONFIG(staticlib) {
-    features.files = $$PWD/features_staticlib/qscintilla2.prf
-} else {
-    features.files = $$PWD/features/qscintilla2.prf
-}
-INSTALLS += features
-
 HEADERS = \
         ./src/editor/qscintilla/Qsci/qsciglobal.h \
         ./src/editor/qscintilla/Qsci/qsciscintilla.h \
@@ -261,8 +160,8 @@ SOURCES = \
         ./src/editor/qscintilla/qsciprinter.cpp \
         ./src/editor/qscintilla/qscistyle.cpp \
         ./src/editor/qscintilla/qscistyledtext.cpp \
-    ./src/editor/qscintilla/MacPasteboardMime.cpp \
-    ./src/editor/qscintilla/InputMethod.cpp \
+        ./src/editor/qscintilla/MacPasteboardMime.cpp \
+        ./src/editor/qscintilla/InputMethod.cpp \
         ./src/editor/qscintilla/SciClasses.cpp \
         ./src/editor/qscintilla/ListBoxQt.cpp \
         ./src/editor/qscintilla/PlatQt.cpp \
@@ -411,9 +310,8 @@ SOURCES = \
         ./src/editor/src/XPM.cpp
 
 TRANSLATIONS = \
-	qscintilla_cs.ts \
-	qscintilla_de.ts \
-	qscintilla_es.ts \
-	qscintilla_fr.ts \
-	qscintilla_pt_br.ts
-}
+        ./src/editor/qscintilla/qscintilla_cs.ts \
+        ./src/editor/qscintilla/qscintilla_de.ts \
+        ./src/editor/qscintilla/qscintilla_es.ts \
+        ./src/editor/qscintilla/qscintilla_fr.ts \
+        ./src/editor/qscintilla/qscintilla_pt_br.ts
