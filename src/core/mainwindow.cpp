@@ -15,9 +15,14 @@
 #include <QFileDialog>
 #include <QTextStream>
 
-#include "../include/mainwindow.h"
+#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "QSci/qsciscintilla.h"
+#include "Qsci/qscilexer.h"
+#include "Qsci/qscilexerpython.h"
+#include "Qsci/qscilexercpp.h"
+#include "Qsci/qscilexermakefile.h"
+
 //#include "events.h"
 
 
@@ -47,6 +52,7 @@ void MainWindow::setupSignals()
     connect(ui->actionToggleCscope, SIGNAL(triggered()), this, SLOT(toggleCscope()));
     connect(ui->actionToggleFiles, SIGNAL(triggered()), this, SLOT(toggleFiles()));
     connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
+    connect(ui->actionUndo, SIGNAL(triggered()), this, SLOT(editorUndo()));
     /*
      * TODO: set up all action handlers
      */
@@ -165,11 +171,19 @@ void MainWindow::openFile()
             QTextStream stream(&f);
             QFileInfo finfo(f);
             QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
+            qsc->setLexer(new QsciLexerMakefile(this));
+            connect(qsc, SIGNAL(textChanged()), this, SLOT(editorUpdate()));
             ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), finfo.fileName());
             while (!stream.atEnd()) {
                QString line = stream.readLine();
                qsc->append( line );
                qsc->append("\n");
+               /* Newline should be selectable from users,
+                * which should has three options
+                * -> Unix (\n)
+                * -> Windows (\r\n)
+                * -> Classic MacOS (\r)
+                */
             }
         }
     }
@@ -230,6 +244,24 @@ void MainWindow::closeFile()
     if (ui->tabWidget->count() <= 1) {
         setIconStates(false);
     }
+}
+
+void MainWindow::editorUpdate()
+{
+    QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
+    if (qsc->isUndoAvailable()) {
+        ui->actionUndo->setEnabled(true);
+    } else {
+        ui->actionUndo->setEnabled(false);
+    }
+    statusBar()->showMessage("Update");
+}
+
+void MainWindow::editorUndo()
+{
+    QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
+    qsc->undo();
+    statusBar()->showMessage("Undo");
 }
 
 void MainWindow::toggleSymbols()

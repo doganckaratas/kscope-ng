@@ -10,7 +10,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "highlighter.h"
 
 #define RELEASE_DATE    "01/02/2018\n"
 #define VERSION         "v0.5_PRE_RELEASE"
@@ -31,7 +30,6 @@ public:
 private:
     Ui::MainWindow *ui;
     int tabIdx;
-    Highlighter *highlighter;
     int getFirstTabIdFromName(QTabWidget *qtw, std::string name);
     void setupSignals();
     void setIconStates(bool state);
@@ -42,6 +40,8 @@ private slots:
     void saveFile();
     void closeFile();
     void closeFile(const int& index);
+    void editorUpdate();
+    void editorUndo();
     void toggleSymbols();
     void toggleCscope();
     void toggleFiles();

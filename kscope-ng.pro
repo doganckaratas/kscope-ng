@@ -28,15 +28,16 @@ TARGET = kscope-ng
 
 TEMPLATE = app
 
-SOURCES +=  ./src/core/main.cpp \
-            ./src/core/mainwindow.cpp \
-            ./src/core/highlighter.cpp \
+SOURCES +=  \
+            ./src/core/main.cpp \
+            ./src/core/mainwindow.cpp
 
 
-HEADERS  += ./src/include/mainwindow.h \
-            ./src/include/highlighter.h
+HEADERS  += \
+            ./src/include/mainwindow.h
 
 INCLUDEPATH += \
+            ./src/include \
             ./src/editor/qscintilla \
             ./src/editor/include \
             ./src/editor/lexlib \
@@ -47,6 +48,3 @@ DEFINES += SCINTILLA_QT SCI_LEXER
 FORMS    += ./src/view/mainwindow.ui
 
 RESOURCES += ./res/resources.qrc
-
-
-#CONFIG   += qscintilla kscope
