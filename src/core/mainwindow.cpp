@@ -25,8 +25,20 @@
 
 //#include "events.h"
 
+#define D "DEBUG: "
 
 #include <iostream>
+
+/** @todo Move event handlers from mainwindow.cpp to here [DONE]
+ *  @todo Also edit makefile to compile this source       [DONE]
+ *  @todo Add Line Numbering                              [DONE]
+ *  @todo Add Custom highlighters
+ *  @todo Add Multithreaded preprocessor for highlighter
+ *  @todo Add Find&Replace
+ *  @todo Add CScope wrapper
+ *  @todo Refactor marked methods
+ */
+
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -53,6 +65,7 @@ void MainWindow::setupSignals()
     connect(ui->actionToggleFiles, SIGNAL(triggered()), this, SLOT(toggleFiles()));
     connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
     connect(ui->actionUndo, SIGNAL(triggered()), this, SLOT(editorUndo()));
+    connect(ui->actionRedo, SIGNAL(triggered()), this, SLOT(editorRedo()));
     /*
      * TODO: set up all action handlers
      */
@@ -118,21 +131,6 @@ void MainWindow::newFile()
 {
     /* TODO: Refactor this method */
 
-//    QTabWidget *qtw = new QTabWidget(this);
-//    QHBoxLayout *qhbl = new QHBoxLayout(qtw);
-//    QTextEdit *qte = new QTextEdit();
-//    highlighter = new Highlighter(qte->document());
-//    qte->setObjectName("editor"); //textview name
-//    qtw->setObjectName("tabs");
-//    qtw->setTabText(qtw->indexOf(qtw),"New File");
-//    qtw->setDocumentMode(true);
-//    connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeFile(int)));
-//    qhbl->addWidget(qte);
-//    qhbl->setMargin(9);
-//    ui->tabWidget->addTab(qtw, QString::fromStdString("New File"));
-//    ui->tabWidget->setCurrentWidget(qtw);
-//    setIconStates(true);
-
     QTabWidget *qtw = new QTabWidget(this);
     QHBoxLayout *qhbl = new QHBoxLayout(qtw);
     QsciScintilla *qsc = new QsciScintilla();
@@ -142,14 +140,15 @@ void MainWindow::newFile()
     qsc->setMarginsForegroundColor(QColor("#ff888888"));
     qtw->setTabText(qtw->indexOf(qtw), "New File");
     qtw->setDocumentMode(true);
-    qtw->setObjectName("tabs");
+    qtw->setObjectName("tab");
     connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeFile(int)));
+    connect(qsc, SIGNAL(textChanged()), this, SLOT(editorUpdate()));
     qhbl->addWidget(qsc);
     qhbl->setMargin(0);
     ui->tabWidget->addTab(qtw, QString::fromStdString("New File"));
     ui->tabWidget->setCurrentWidget(qtw);
     setIconStates(true);
-    statusBar()->showMessage("New File");
+    statusBar()->showMessage(D"New File");
 }
 
 void MainWindow::openFile()
@@ -159,7 +158,7 @@ void MainWindow::openFile()
     statusBar()->showMessage("Open File");
     QString fname = QFileDialog::getOpenFileName(this,
                                                  "Open File", "",
-                                                 "All Files (*.*);;"
+                                                 "All Files (*);;"
                                                  "Text File (*.txt);;"
                                                  "Makefile (Makefile);;"
                                                  "C File (*.c *.h);;"
@@ -173,18 +172,14 @@ void MainWindow::openFile()
             QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
             qsc->setLexer(new QsciLexerMakefile(this));
             connect(qsc, SIGNAL(textChanged()), this, SLOT(editorUpdate()));
-            ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), finfo.fileName());
-            while (!stream.atEnd()) {
-               QString line = stream.readLine();
-               qsc->append( line );
-               qsc->append("\n");
-               /* Newline should be selectable from users,
-                * which should has three options
-                * -> Unix (\n)
-                * -> Windows (\r\n)
-                * -> Classic MacOS (\r)
-                */
-            }
+            qsc->setText(stream.readAll());
+            qsc->setModified(false);
+            /* Newline should be selectable from users,
+             * which should has three options
+             * -> Unix (\n)
+             * -> Windows (\r\n)
+             * -> Classic MacOS (\r)
+             */
         }
     }
 }
@@ -196,7 +191,7 @@ void MainWindow::saveFile()
     statusBar()->showMessage("Save File");
     QString fname = QFileDialog::getSaveFileName(this,
                                                     "Save File", "",
-                                                    "All Files (*.*);;"
+                                                    "All Files (*);;"
                                                     "Text File (*.txt);;"
                                                     "Makefile (Makefile);;"
                                                     "C File (*.c *.h);;"
@@ -213,20 +208,23 @@ void MainWindow::saveFile()
             f.close();
         }
     } else {
-        statusBar()->showMessage("Save Canceled.");
+        statusBar()->showMessage(D"Save Canceled.");
     }
 }
 
 void MainWindow::closeFile(const int& index)
 {
-    statusBar()->showMessage("Close File with idx");
+    statusBar()->showMessage(D"Close Tab File");
 
     if (index == -1) {
         return;
     }
+    QsciScintilla *qsc = ui->tabWidget->widget(index)->findChild<QsciScintilla *>("editor");
+    qsc->close();
     ui->tabWidget->widget(index)->deleteLater();
+    qsc->deleteLater();
     /*
-     * MEMORY LEAK, delete tab content  & document too.
+     * MEMORY LEAK, delete tab content  & document too. [DONE]
      */
     if (ui->tabWidget->count() <= 1) {
         setIconStates(false);
@@ -235,11 +233,14 @@ void MainWindow::closeFile(const int& index)
 
 void MainWindow::closeFile()
 {
-    statusBar()->showMessage("Close File single inst");
+    statusBar()->showMessage(D"Close Current File");
     int idx = ui->tabWidget->currentIndex();
     if (idx == -1) {
         return;
     }
+    QsciScintilla *qsc = ui->tabWidget->widget(idx)->findChild<QsciScintilla *>("editor");
+    qsc->close();
+    qsc->deleteLater();
     ui->tabWidget->widget(idx)->deleteLater();
     if (ui->tabWidget->count() <= 1) {
         setIconStates(false);
@@ -250,18 +251,35 @@ void MainWindow::editorUpdate()
 {
     QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
     if (qsc->isUndoAvailable()) {
+    // ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), "*" + ui->tabWidget->tabText(ui->tabWidget->currentIndex()));
+       /* TODO
+        * Implement this correctly later
+        */
         ui->actionUndo->setEnabled(true);
     } else {
         ui->actionUndo->setEnabled(false);
     }
-    statusBar()->showMessage("Update");
+
+    if (qsc->isRedoAvailable()) {
+        ui->actionRedo->setEnabled(true);
+    } else {
+        ui->actionRedo->setEnabled(false);
+    }
+    statusBar()->showMessage(D"Updated Text");
 }
 
 void MainWindow::editorUndo()
 {
     QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
     qsc->undo();
-    statusBar()->showMessage("Undo");
+    statusBar()->showMessage(D"Undo");
+}
+
+void MainWindow::editorRedo()
+{
+    QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
+    qsc->redo();
+    statusBar()->showMessage(D"Redo");
 }
 
 void MainWindow::toggleSymbols()

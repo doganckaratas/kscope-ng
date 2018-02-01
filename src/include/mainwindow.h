@@ -42,6 +42,7 @@ private slots:
     void closeFile(const int& index);
     void editorUpdate();
     void editorUndo();
+    void editorRedo();
     void toggleSymbols();
     void toggleCscope();
     void toggleFiles();
