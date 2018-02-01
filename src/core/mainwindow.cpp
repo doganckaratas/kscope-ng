@@ -17,6 +17,7 @@
 
 #include "../include/mainwindow.h"
 #include "ui_mainwindow.h"
+#include "QSci/qsciscintilla.h"
 //#include "events.h"
 
 
@@ -111,17 +112,34 @@ void MainWindow::newFile()
 {
     /* TODO: Refactor this method */
 
+//    QTabWidget *qtw = new QTabWidget(this);
+//    QHBoxLayout *qhbl = new QHBoxLayout(qtw);
+//    QTextEdit *qte = new QTextEdit();
+//    highlighter = new Highlighter(qte->document());
+//    qte->setObjectName("editor"); //textview name
+//    qtw->setObjectName("tabs");
+//    qtw->setTabText(qtw->indexOf(qtw),"New File");
+//    qtw->setDocumentMode(true);
+//    connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeFile(int)));
+//    qhbl->addWidget(qte);
+//    qhbl->setMargin(9);
+//    ui->tabWidget->addTab(qtw, QString::fromStdString("New File"));
+//    ui->tabWidget->setCurrentWidget(qtw);
+//    setIconStates(true);
+
     QTabWidget *qtw = new QTabWidget(this);
     QHBoxLayout *qhbl = new QHBoxLayout(qtw);
-    QTextEdit *qte = new QTextEdit();
-    highlighter = new Highlighter(qte->document());
-    qte->setObjectName("editor"); //textview name
-    qtw->setObjectName("tabs");
-    qtw->setTabText(qtw->indexOf(qtw),"New File");
+    QsciScintilla *qsc = new QsciScintilla();
+    qsc->setObjectName("editor");
+    qsc->setMarginType(0, QsciScintilla::NumberMargin);
+    qsc->setMarginWidth(0, "0000");
+    qsc->setMarginsForegroundColor(QColor("#ff888888"));
+    qtw->setTabText(qtw->indexOf(qtw), "New File");
     qtw->setDocumentMode(true);
+    qtw->setObjectName("tabs");
     connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeFile(int)));
-    qhbl->addWidget(qte);
-    qhbl->setMargin(9);
+    qhbl->addWidget(qsc);
+    qhbl->setMargin(0);
     ui->tabWidget->addTab(qtw, QString::fromStdString("New File"));
     ui->tabWidget->setCurrentWidget(qtw);
     setIconStates(true);
@@ -146,11 +164,12 @@ void MainWindow::openFile()
             MainWindow::newFile();
             QTextStream stream(&f);
             QFileInfo finfo(f);
-            QTextEdit *qte = ui->tabWidget->currentWidget()->findChild<QTextEdit *>("editor");
+            QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
             ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), finfo.fileName());
             while (!stream.atEnd()) {
                QString line = stream.readLine();
-               qte->append( line );
+               qsc->append( line );
+               qsc->append("\n");
             }
         }
     }
@@ -174,9 +193,9 @@ void MainWindow::saveFile()
         if (f.open(QIODevice::ReadOnly | QIODevice::Text | QIODevice::ReadWrite)) {
             QTextStream stream(&f);
             QFileInfo finfo(f);
-            QTextEdit *qte = ui->tabWidget->currentWidget()->findChild<QTextEdit *>("editor"); // !
+            QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor"); // !
             ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), finfo.fileName());
-            stream << qte->toPlainText();
+            stream << qsc->text();
             f.close();
         }
     } else {
