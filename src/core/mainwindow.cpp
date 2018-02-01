@@ -172,6 +172,7 @@ void MainWindow::openFile()
             QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
             qsc->setLexer(new QsciLexerMakefile(this));
             connect(qsc, SIGNAL(textChanged()), this, SLOT(editorUpdate()));
+            ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), finfo.fileName());
             qsc->setText(stream.readAll());
             qsc->setModified(false);
             /* Newline should be selectable from users,
