@@ -5,6 +5,9 @@
 #-------------------------------------------------
 
 
+# Add INSTALLS directives for qscintilla
+
+
 include(./src/editor/qscintilla.pri)
 
 QT       += core gui

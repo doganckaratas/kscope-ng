@@ -17,7 +17,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "QSci/qsciscintilla.h"
+#include "Qsci/qsciscintilla.h"
 #include "Qsci/qscilexer.h"
 #include "Qsci/qscilexerpython.h"
 #include "Qsci/qscilexercpp.h"
