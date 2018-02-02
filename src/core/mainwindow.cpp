@@ -111,8 +111,6 @@ void MainWindow::setIconStates(bool state)
         ui->actionCopy_As_HTML->setEnabled(true);
         ui->actionPaste->setEnabled(true);
         ui->actionPrint->setEnabled(true);
-        ui->actionUndo->setEnabled(true);
-        ui->actionRedo->setEnabled(true);
         ui->actionDeselect->setEnabled(true);
         ui->actionBlock_Selection->setEnabled(true);
         ui->actionOverwrite_Mode->setEnabled(true);
