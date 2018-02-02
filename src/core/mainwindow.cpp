@@ -25,25 +25,26 @@
 
 //#include "events.h"
 
-#define D "DEBUG: "
-
 #include <iostream>
 
-/** @todo Move event handlers from mainwindow.cpp to here [DONE]
+/** === Roadmap ===
+ *  @todo Implement Event.cpp, Action.cpp, View.cpp
  *  @todo Also edit makefile to compile this source       [DONE]
  *  @todo Add Line Numbering                              [DONE]
- *  @todo Add Custom highlighters
+ *  @todo Add Custom highlighters                         [WIP*]
  *  @todo Add Multithreaded preprocessor for highlighter
  *  @todo Add Find&Replace
  *  @todo Add CScope wrapper
  *  @todo Refactor marked methods
+ *  @todo Delete View XML and implement them with C++
+ *  @todo Fix Windows release
  */
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    MainWindow::setWindowTitle(QString::fromStdString("KScope-NG - ") +
+    MainWindow::setWindowTitle(QString::fromStdString("KScope-NG ") +
                                QString::fromStdString(VERSION));
     /*
      *  remove above line from production release
@@ -137,20 +138,19 @@ void MainWindow::newFile()
     qtw->setDocumentMode(true);
     qtw->setObjectName("tab");
     connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeFile(int)));
+    connect(qsc, SIGNAL(selectionChanged()), this, SLOT(editorSelection()));
     connect(qsc, SIGNAL(textChanged()), this, SLOT(editorUpdate()));
     qhbl->addWidget(qsc);
     qhbl->setMargin(0);
     ui->tabWidget->addTab(qtw, QString::fromStdString("New File"));
     ui->tabWidget->setCurrentWidget(qtw);
     setIconStates(true);
-    statusBar()->showMessage(D"New File");
+    D("New File");
 }
 
 void MainWindow::openFile()
 {
     /* TODO: Refactor this method */
-
-    statusBar()->showMessage("Open File");
     QString fname = QFileDialog::getOpenFileName(this,
                                                  "Open File", "",
                                                  "All Files (*);;"
@@ -168,6 +168,7 @@ void MainWindow::openFile()
             //qsc->setLexer(new QsciLexerCPP(this));
             qsc->setFont(QFont("Ubuntu Mono", 12, QFont::Normal, false));
             qsc->setFocus();
+            connect(qsc, SIGNAL(selectionChanged()), this, SLOT(editorSelection()));
             connect(qsc, SIGNAL(textChanged()), this, SLOT(editorUpdate()));
             ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), finfo.fileName());
             qsc->setText(stream.readAll());
@@ -180,6 +181,8 @@ void MainWindow::openFile()
              */
         }
     }
+
+    D("Open File");
 }
 
 void MainWindow::saveFile()
@@ -206,13 +209,13 @@ void MainWindow::saveFile()
             f.close();
         }
     } else {
-        statusBar()->showMessage(D"Save Canceled.");
+        D("Save Canceled.");
     }
 }
 
 void MainWindow::closeFile(const int& index)
 {
-    statusBar()->showMessage(D"Close Tab File");
+    D("Close Tab File");
 
     if (index == -1) {
         return;
@@ -231,7 +234,7 @@ void MainWindow::closeFile(const int& index)
 
 void MainWindow::closeFile()
 {
-    statusBar()->showMessage(D"Close Current File");
+    D("Close Current File");
     int idx = ui->tabWidget->currentIndex();
     if (idx == -1) {
         return;
@@ -263,21 +266,27 @@ void MainWindow::editorUpdate()
     } else {
         ui->actionRedo->setEnabled(false);
     }
-    statusBar()->showMessage(D"Updated Text");
+    D("Updated Text");
+}
+
+void MainWindow::editorSelection()
+{
+
+    D("Selected Text");
 }
 
 void MainWindow::editorUndo()
 {
     QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
     qsc->undo();
-    statusBar()->showMessage(D"Undo");
+    D("Undo");
 }
 
 void MainWindow::editorRedo()
 {
     QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
     qsc->redo();
-    statusBar()->showMessage(D"Redo");
+    D("Redo");
 }
 
 void MainWindow::toggleSymbols()
@@ -313,10 +322,12 @@ void MainWindow::aboutDialog()
                 "Qt Based CScope Frontend/IDE\n"
                 "Written from scratch\n\n"
                 "Version: "
-                VER_STR
+                 VER_STR
                 "Author: Dogan C. Karatas\n"
                 "Release Date: "
-                RELEASE_DATE);
+                 RELEASE_DATE);
+    qm->setDetailedText("Extra Info Goes Here.");
+    qm->setWindowTitle("About KScope-NG");
     qm->exec();
 }
 

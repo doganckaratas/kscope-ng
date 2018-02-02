@@ -14,6 +14,7 @@
 #define RELEASE_DATE    "02/02/2018\n"
 #define VERSION         "v0.6_PRE_RELEASE"
 #define VER_STR         VERSION"\n"
+#define D(arg)          statusBar()->showMessage("DEBUG: " + QString::fromStdString(arg),1000)
 
 namespace Ui {
 class MainWindow;
@@ -40,6 +41,7 @@ private slots:
     void saveFile();
     void closeFile();
     void closeFile(const int& index);
+    void editorSelection();
     void editorUpdate();
     void editorUndo();
     void editorRedo();
