@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>1150</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuEdit">
@@ -386,7 +386,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionOpenProject"/>
-   <addaction name="actionRebuildProject"/>
+   <addaction name="actionRebuild_Database"/>
   </widget>
   <widget class="QToolBar" name="navigationToolBar">
    <property name="windowTitle">
@@ -1060,6 +1060,10 @@
    </property>
   </action>
   <action name="actionRebuild_Database">
+   <property name="icon">
+    <iconset resource="../../res/resources.qrc">
+     <normaloff>:/icons/icons/cscope_db.png</normaloff>:/icons/icons/cscope_db.png</iconset>
+   </property>
    <property name="text">
     <string>Rebuild Database</string>
    </property>

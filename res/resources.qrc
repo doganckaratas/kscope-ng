@@ -32,5 +32,6 @@
         <file>icons/history.png</file>
         <file>icons/unlock.png</file>
         <file>icons/lock.png</file>
+        <file>icons/cscope_db.png</file>
     </qresource>
 </RCC>
