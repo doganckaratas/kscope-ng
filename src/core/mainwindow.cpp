@@ -106,10 +106,6 @@ void MainWindow::setIconStates(bool state)
         ui->actionSave_All->setEnabled(true);
         ui->actionSave_As->setEnabled(true);
         ui->actionSelect_All->setEnabled(true);
-        ui->actionCut->setEnabled(true);
-        ui->actionCopy->setEnabled(true);
-        ui->actionCopy_As_HTML->setEnabled(true);
-        ui->actionPaste->setEnabled(true);
         ui->actionPrint->setEnabled(true);
         ui->actionDeselect->setEnabled(true);
         ui->actionBlock_Selection->setEnabled(true);
@@ -136,6 +132,7 @@ void MainWindow::newFile()
     qsc->setMarginType(0, QsciScintilla::NumberMargin);
     qsc->setMarginWidth(0, "0000");
     qsc->setMarginsForegroundColor(QColor("#ff888888"));
+    qsc->setFocus();
     qtw->setTabText(qtw->indexOf(qtw), "New File");
     qtw->setDocumentMode(true);
     qtw->setObjectName("tab");
@@ -170,6 +167,7 @@ void MainWindow::openFile()
             QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
             //qsc->setLexer(new QsciLexerCPP(this));
             qsc->setFont(QFont("Ubuntu Mono", 12, QFont::Normal, false));
+            qsc->setFocus();
             connect(qsc, SIGNAL(textChanged()), this, SLOT(editorUpdate()));
             ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), finfo.fileName());
             qsc->setText(stream.readAll());
