@@ -170,7 +170,8 @@ void MainWindow::openFile()
             QTextStream stream(&f);
             QFileInfo finfo(f);
             QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
-            qsc->setLexer(new QsciLexerMakefile(this));
+            //qsc->setLexer(new QsciLexerCPP(this));
+            qsc->setFont(QFont("Ubuntu Mono", 12, QFont::Normal, false));
             connect(qsc, SIGNAL(textChanged()), this, SLOT(editorUpdate()));
             ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), finfo.fileName());
             qsc->setText(stream.readAll());
