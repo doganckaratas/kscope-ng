@@ -140,10 +140,12 @@ void MainWindow::newFile()
     connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeFile(int)));
     connect(qsc, SIGNAL(selectionChanged()), this, SLOT(editorSelection()));
     connect(qsc, SIGNAL(textChanged()), this, SLOT(editorUpdate()));
+    connect(qsc, SIGNAL(modificationChanged(bool)), this, SLOT(editorModified(bool)));
     qhbl->addWidget(qsc);
     qhbl->setMargin(0);
     ui->tabWidget->addTab(qtw, QString::fromStdString("New File"));
     ui->tabWidget->setCurrentWidget(qtw);
+    ui->tabWidget->setTabIcon(ui->tabWidget->currentIndex(),QIcon(":/icons/icons/c_source.png"));
     setIconStates(true);
     D("New File");
 }
@@ -269,10 +271,23 @@ void MainWindow::editorUpdate()
     D("Updated Text");
 }
 
+void MainWindow::editorModified(bool status)
+{
+    if (status == true) {
+        ui->tabWidget->setTabIcon(ui->tabWidget->currentIndex(),QIcon(":/icons/icons/save.png"));
+        D("MODIFIED");
+    } else {
+        ui->tabWidget->setTabIcon(ui->tabWidget->currentIndex(),QIcon(":/icons/icons/c_source.png"));
+        D("NOT MODIFIED");
+    }
+}
+
 void MainWindow::editorSelection()
 {
-
-    D("Selected Text");
+    QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
+    if (qsc->selectedText().length() > 0) {
+        D("Selected Text");
+    }
 }
 
 void MainWindow::editorUndo()

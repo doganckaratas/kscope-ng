@@ -33,5 +33,6 @@
         <file>icons/unlock.png</file>
         <file>icons/lock.png</file>
         <file>icons/cscope_db.png</file>
+        <file>icons/c_source.png</file>
     </qresource>
 </RCC>
