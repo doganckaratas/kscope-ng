@@ -30,7 +30,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    int tabIdx;
+    QString currentFile;
     int getFirstTabIdFromName(QTabWidget *qtw, std::string name);
     void setupSignals();
     void setIconStates(bool state);
@@ -39,13 +39,18 @@ private slots:
     void newFile();
     void openFile();
     void saveFile();
+    void saveFileAs();
     void closeFile();
     void closeFile(const int& index);
+    void editorTabChanged(int index);
     void editorSelection();
     void editorUpdate();
     void editorModified(bool status);
     void editorUndo();
     void editorRedo();
+    void editorCut();
+    void editorCopy();
+    void editorPaste();
     void toggleSymbols();
     void toggleCscope();
     void toggleFiles();

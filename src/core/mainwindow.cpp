@@ -49,7 +49,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     /*
      *  remove above line from production release
      */
-    tabIdx = 1;
     setupSignals();
     setIconStates(false);
 }
@@ -59,6 +58,7 @@ void MainWindow::setupSignals()
     connect(ui->actionNew, SIGNAL(triggered()), this, SLOT(newFile()));
     connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(openFile()));
     connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(saveFile()));
+    connect(ui->actionSave_As, SIGNAL(triggered()), this, SLOT(saveFileAs()));
     connect(ui->actionClose, SIGNAL(triggered()), this, SLOT(closeFile()));
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(aboutDialog()));
     connect(ui->actionToggleSymbols, SIGNAL(triggered()), this, SLOT(toggleSymbols()));
@@ -67,6 +67,9 @@ void MainWindow::setupSignals()
     connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
     connect(ui->actionUndo, SIGNAL(triggered()), this, SLOT(editorUndo()));
     connect(ui->actionRedo, SIGNAL(triggered()), this, SLOT(editorRedo()));
+    connect(ui->actionCut, SIGNAL(triggered()), this, SLOT(editorCut()));
+    connect(ui->actionCopy, SIGNAL(triggered()), this, SLOT(editorCopy()));
+    connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(editorTabChanged(int)));
     /*
      * TODO: set up all action handlers
      */
@@ -103,10 +106,10 @@ void MainWindow::setIconStates(bool state)
         ui->actionShrink_Font->setEnabled(false);
     } else {
         ui->actionClose->setEnabled(true);
-        ui->actionSave->setEnabled(true);
         ui->actionSave_All->setEnabled(true);
         ui->actionSave_As->setEnabled(true);
         ui->actionSelect_All->setEnabled(true);
+        ui->actionPaste->setEnabled(true);
         ui->actionPrint->setEnabled(true);
         ui->actionDeselect->setEnabled(true);
         ui->actionBlock_Selection->setEnabled(true);
@@ -141,11 +144,16 @@ void MainWindow::newFile()
     connect(qsc, SIGNAL(selectionChanged()), this, SLOT(editorSelection()));
     connect(qsc, SIGNAL(textChanged()), this, SLOT(editorUpdate()));
     connect(qsc, SIGNAL(modificationChanged(bool)), this, SLOT(editorModified(bool)));
+    connect(qsc, SIGNAL(copyAvailable(bool)), ui->actionCopy, SLOT(setEnabled(bool)));
+    connect(qsc, SIGNAL(copyAvailable(bool)), ui->actionCut, SLOT(setEnabled(bool)));
+    connect(ui->actionPaste, SIGNAL(triggered(bool)), this, SLOT(editorPaste()));
     qhbl->addWidget(qsc);
     qhbl->setMargin(0);
+    qtw->setTabToolTip(qtw->currentIndex(),"New File");
     ui->tabWidget->addTab(qtw, QString::fromStdString("New File"));
     ui->tabWidget->setCurrentWidget(qtw);
     ui->tabWidget->setTabIcon(ui->tabWidget->currentIndex(),QIcon(":/icons/icons/c_source.png"));
+    ui->actionSave->setEnabled(false);
     setIconStates(true);
     D("New File");
 }
@@ -173,6 +181,8 @@ void MainWindow::openFile()
             connect(qsc, SIGNAL(selectionChanged()), this, SLOT(editorSelection()));
             connect(qsc, SIGNAL(textChanged()), this, SLOT(editorUpdate()));
             ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), finfo.fileName());
+            ui->tabWidget->setObjectName(fname);
+
             qsc->setText(stream.readAll());
             qsc->setModified(false);
             /* Newline should be selectable from users,
@@ -182,6 +192,7 @@ void MainWindow::openFile()
              * -> Classic MacOS (\r)
              */
         }
+        ui->tabWidget->setTabToolTip(ui->tabWidget->currentIndex(),fname);
     }
 
     D("Open File");
@@ -189,11 +200,32 @@ void MainWindow::openFile()
 
 void MainWindow::saveFile()
 {
+    /* TODO: Merge with Save As */
+
+    D("Save File");
+    if (ui->tabWidget->tabToolTip(ui->tabWidget->currentIndex()) != "New File") {
+        QFile f(currentFile);
+        if (f.open(QIODevice::ReadOnly | QIODevice::Text | QIODevice::ReadWrite)) {
+            QTextStream stream(&f);
+            QFileInfo finfo(f);
+            QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor"); // !
+            ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), finfo.fileName());
+            stream << qsc->text();
+            f.close();
+        }
+    } else {
+        this->saveFileAs();
+    }
+
+}
+
+void MainWindow::saveFileAs()
+{
     /* TODO: Refactor this method */
 
-    statusBar()->showMessage("Save File");
+    D("Save File As");
     QString fname = QFileDialog::getSaveFileName(this,
-                                                    "Save File", "",
+                                                    "Save File As", "",
                                                     "All Files (*);;"
                                                     "Text File (*.txt);;"
                                                     "Makefile (Makefile);;"
@@ -209,6 +241,7 @@ void MainWindow::saveFile()
             ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), finfo.fileName());
             stream << qsc->text();
             f.close();
+            ui->tabWidget->setTabToolTip(ui->tabWidget->currentIndex(),fname);
         }
     } else {
         D("Save Canceled.");
@@ -250,6 +283,11 @@ void MainWindow::closeFile()
     }
 }
 
+void MainWindow::editorTabChanged(int index)
+{
+     D("Tab Changed to " + index);
+}
+
 void MainWindow::editorUpdate()
 {
     QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
@@ -273,12 +311,12 @@ void MainWindow::editorUpdate()
 
 void MainWindow::editorModified(bool status)
 {
-    if (status == true) {
+    if (status == true) { // Icon change & show save prompt
         ui->tabWidget->setTabIcon(ui->tabWidget->currentIndex(),QIcon(":/icons/icons/save.png"));
-        D("MODIFIED");
+        ui->actionSave->setEnabled(true);
     } else {
         ui->tabWidget->setTabIcon(ui->tabWidget->currentIndex(),QIcon(":/icons/icons/c_source.png"));
-        D("NOT MODIFIED");
+        ui->actionSave->setEnabled(false);
     }
 }
 
@@ -287,6 +325,8 @@ void MainWindow::editorSelection()
     QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
     if (qsc->selectedText().length() > 0) {
         D("Selected Text");
+    } else {
+        D("Deselected Text");
     }
 }
 
@@ -302,6 +342,32 @@ void MainWindow::editorRedo()
     QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
     qsc->redo();
     D("Redo");
+}
+
+void MainWindow::editorCut()
+{
+    QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
+    qsc->cut();
+    if (! ui->actionPaste->isEnabled()) {
+        ui->actionPaste->setEnabled(true);
+    }
+    D("Cut");
+}
+
+void MainWindow::editorCopy()
+{
+    QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
+    qsc->copy();
+    if (! ui->actionPaste->isEnabled()) {
+        ui->actionPaste->setEnabled(true);
+    }
+    D("Copy");
+}
+
+void MainWindow::editorPaste()
+{
+    QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
+    qsc->paste();
 }
 
 void MainWindow::toggleSymbols()
