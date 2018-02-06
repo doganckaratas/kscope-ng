@@ -174,16 +174,15 @@ void MainWindow::openFile()
             MainWindow::newFile();
             QTextStream stream(&f);
             QFileInfo finfo(f);
-            QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
             //qsc->setLexer(new QsciLexerCPP(this));
-            qsc->setFocus();
-            connect(qsc, SIGNAL(selectionChanged()), this, SLOT(editorSelection()));
-            connect(qsc, SIGNAL(textChanged()), this, SLOT(editorUpdate()));
+            ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setFocus();
+            connect(ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor"), SIGNAL(selectionChanged()), this, SLOT(editorSelection()));
+            connect(ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor"), SIGNAL(textChanged()), this, SLOT(editorUpdate()));
             ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), finfo.fileName());
             ui->tabWidget->setTabToolTip(ui->tabWidget->currentIndex(),fname);
             ui->tabWidget->setObjectName(fname);
-            qsc->setText(stream.readAll());
-            qsc->setModified(false);
+            ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setText(stream.readAll());
+            ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setModified(false);
             /* Newline should be selectable from users,
              * which should has three options
              * -> Unix (\n)
@@ -198,19 +197,19 @@ void MainWindow::openFile()
             if (finfo.suffix() == "cpp" || finfo.suffix() == "c" || finfo.suffix() == "h" || finfo.suffix() == "hpp") {
                 QsciLexerCPP *qlcpp = new QsciLexerCPP(this);
                 qlcpp->setFont(font);
-                qsc->setLexer(qlcpp);
+                ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setLexer(qlcpp);
 
             } else if (finfo.suffix() == "py") {
                 QsciLexerPython *qlpy = new QsciLexerPython(this);
                 qlpy->setFont(font);
-                qsc->setLexer(qlpy);
+                ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setLexer(qlpy);
             } else if (finfo.baseName() == "Makefile") {
                 QsciLexerMakefile *qlmk = new QsciLexerMakefile(this);
                 qlmk->setFont(font);
-                qsc->setLexer(qlmk);
+                ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setLexer(qlmk);
             } else {
                 //text document
-                qsc->setFont(font);
+                ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setFont(font);
             }
 
         }
@@ -228,7 +227,6 @@ void MainWindow::saveFile()
         if (f.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text)) {
             QTextStream stream(&f);
             QFileInfo finfo(f);
-            QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor"); // !
             ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), finfo.fileName());
             stream << qsc->text();
             f.close();
@@ -261,7 +259,6 @@ void MainWindow::saveFileAs()
         if (f.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text)) {
             QTextStream stream(&f);
             QFileInfo finfo(f);
-            QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor"); // !
             ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), finfo.fileName());
             stream << qsc->text();
             f.close();
@@ -281,10 +278,9 @@ void MainWindow::closeFile(const int& index)
     if (index == -1) {
         return;
     }
-    QsciScintilla *qsc = ui->tabWidget->widget(index)->findChild<QsciScintilla *>("editor");
-    qsc->close();
+    ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->close();
     ui->tabWidget->widget(index)->deleteLater();
-    qsc->deleteLater();
+    ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->deleteLater();
     /*
      * MEMORY LEAK, delete tab content  & document too. [DONE]
      */
@@ -300,9 +296,8 @@ void MainWindow::closeFile()
     if (idx == -1) {
         return;
     }
-    QsciScintilla *qsc = ui->tabWidget->widget(idx)->findChild<QsciScintilla *>("editor");
-    qsc->close();
-    qsc->deleteLater();
+    ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->close();
+    ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->deleteLater();
     ui->tabWidget->widget(idx)->deleteLater();
     if (ui->tabWidget->count() <= 1) {
         setIconStates(false);
@@ -316,8 +311,7 @@ void MainWindow::editorTabChanged(int index)
 
 void MainWindow::editorUpdate()
 {
-    QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
-    if (qsc->isUndoAvailable()) {
+    if (ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->isUndoAvailable()) {
     // ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), "*" + ui->tabWidget->tabText(ui->tabWidget->currentIndex()));
        /* TODO
         * Implement this correctly later
@@ -327,7 +321,7 @@ void MainWindow::editorUpdate()
         ui->actionUndo->setEnabled(false);
     }
 
-    if (qsc->isRedoAvailable()) {
+    if (ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->isRedoAvailable()) {
         ui->actionRedo->setEnabled(true);
     } else {
         ui->actionRedo->setEnabled(false);
@@ -348,8 +342,7 @@ void MainWindow::editorModified(bool status)
 
 void MainWindow::editorSelection()
 {
-    QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
-    if (qsc->selectedText().length() > 0) {
+    if (ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->selectedText().length() > 0) {
         D("Selected Text");
     } else {
         D("Deselected Text");
@@ -358,22 +351,19 @@ void MainWindow::editorSelection()
 
 void MainWindow::editorUndo()
 {
-    QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
-    qsc->undo();
+    ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->undo();
     D("Undo");
 }
 
 void MainWindow::editorRedo()
 {
-    QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
-    qsc->redo();
+    ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->redo();
     D("Redo");
 }
 
 void MainWindow::editorCut()
 {
-    QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
-    qsc->cut();
+    ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->cut();
     if (! ui->actionPaste->isEnabled()) {
         ui->actionPaste->setEnabled(true);
     }
@@ -382,8 +372,7 @@ void MainWindow::editorCut()
 
 void MainWindow::editorCopy()
 {
-    QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
-    qsc->copy();
+    ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->copy();
     if (! ui->actionPaste->isEnabled()) {
         ui->actionPaste->setEnabled(true);
     }
@@ -392,8 +381,7 @@ void MainWindow::editorCopy()
 
 void MainWindow::editorPaste()
 {
-    QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
-    qsc->paste();
+    ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->paste();
 }
 
 void MainWindow::toggleSymbols()
