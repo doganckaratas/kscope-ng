@@ -29,15 +29,18 @@
 
 /** === Roadmap ===
  *  @todo Implement Event.cpp, Action.cpp, View.cpp
- *  @todo Also edit makefile to compile this source       [DONE]
- *  @todo Add Line Numbering                              [DONE]
- *  @todo Add Custom highlighters                         [WIP*]
- *  @todo Add Multithreaded preprocessor for highlighter
+ *  @todo Actually, Events.cpp must be abstract and inherited by EditorEvents.cpp and WindowEvents.cpp
+ *  @todo Also Action.cpp must be same as Events classes
+ *  @todo View.cpp needs to be setup all UI elements, in another thread.
+ *  @todo Add Dynamic Line Numbering
+ *  @todo Add Custom highlighters
+ *  @todo Run QScintilla component and its' instances in another thread
  *  @todo Add Find&Replace
  *  @todo Add CScope wrapper
  *  @todo Refactor marked methods
- *  @todo Delete View XML and implement them with C++
+ *  @todo Delete View XML and implement them with C++ (same with #4)
  *  @todo Fix Windows release
+ *  @todo We need a cool and sleek icon :o
  */
 
 
@@ -228,10 +231,12 @@ void MainWindow::saveFile()
             QTextStream stream(&f);
             QFileInfo finfo(f);
             ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), finfo.fileName());
-            stream << qsc->text();
+            stream << ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->text();
             f.close();
             ui->tabWidget->setTabIcon(ui->tabWidget->currentIndex(),QIcon(":/icons/icons/c_source.png"));
             // reload document
+            connect(ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor"), SIGNAL(selectionChanged()), this, SLOT(editorSelection()));
+            connect(ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor"), SIGNAL(textChanged()), this, SLOT(editorUpdate()));
             D("Save File");
         }
     } else {
@@ -260,7 +265,7 @@ void MainWindow::saveFileAs()
             QTextStream stream(&f);
             QFileInfo finfo(f);
             ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), finfo.fileName());
-            stream << qsc->text();
+            stream << ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->text();
             f.close();
             ui->tabWidget->setTabToolTip(ui->tabWidget->currentIndex(),fname);
             ui->tabWidget->setTabIcon(ui->tabWidget->currentIndex(),QIcon(":/icons/icons/c_source.png"));
@@ -331,6 +336,7 @@ void MainWindow::editorUpdate()
 
 void MainWindow::editorModified(bool status)
 {
+    // there are some problems in here!!
     if (status == true) { // Icon change & show save prompt
         ui->tabWidget->setTabIcon(ui->tabWidget->currentIndex(),QIcon(":/icons/icons/save.png"));
         ui->actionSave->setEnabled(true);
