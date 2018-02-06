@@ -10,7 +10,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "Qsci/qsciscintilla.h"
 
 #define RELEASE_DATE    "06/02/2018\n"
 #define VERSION         "v0.7_PRE_RELEASE"
