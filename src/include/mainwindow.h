@@ -11,8 +11,8 @@
 
 #include <QMainWindow>
 
-#define RELEASE_DATE    "02/02/2018\n"
-#define VERSION         "v0.6_PRE_RELEASE"
+#define RELEASE_DATE    "06/02/2018\n"
+#define VERSION         "v0.7_PRE_RELEASE"
 #define VER_STR         VERSION"\n"
 #define D(arg)          statusBar()->showMessage("DEBUG: " + QString::fromStdString(arg),1000)
 

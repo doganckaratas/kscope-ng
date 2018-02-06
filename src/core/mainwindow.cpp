@@ -149,11 +149,11 @@ void MainWindow::newFile()
     connect(ui->actionPaste, SIGNAL(triggered(bool)), this, SLOT(editorPaste()));
     qhbl->addWidget(qsc);
     qhbl->setMargin(0);
-    qtw->setTabToolTip(qtw->currentIndex(),"New File");
     ui->tabWidget->addTab(qtw, QString::fromStdString("New File"));
     ui->tabWidget->setCurrentWidget(qtw);
     ui->tabWidget->setTabIcon(ui->tabWidget->currentIndex(),QIcon(":/icons/icons/c_source.png"));
     ui->actionSave->setEnabled(false);
+    ui->tabWidget->setTabToolTip(ui->tabWidget->currentIndex(),"New File");
     setIconStates(true);
     D("New File");
 }
@@ -176,13 +176,12 @@ void MainWindow::openFile()
             QFileInfo finfo(f);
             QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor");
             //qsc->setLexer(new QsciLexerCPP(this));
-            qsc->setFont(QFont("Ubuntu Mono", 12, QFont::Normal, false));
             qsc->setFocus();
             connect(qsc, SIGNAL(selectionChanged()), this, SLOT(editorSelection()));
             connect(qsc, SIGNAL(textChanged()), this, SLOT(editorUpdate()));
             ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), finfo.fileName());
+            ui->tabWidget->setTabToolTip(ui->tabWidget->currentIndex(),fname);
             ui->tabWidget->setObjectName(fname);
-
             qsc->setText(stream.readAll());
             qsc->setModified(false);
             /* Newline should be selectable from users,
@@ -191,8 +190,30 @@ void MainWindow::openFile()
              * -> Windows (\r\n)
              * -> Classic MacOS (\r)
              */
+
+            // lexer
+
+            QFont font = QFont("Ubuntu Mono", 12, QFont::Normal, false);
+
+            if (finfo.suffix() == "cpp" || finfo.suffix() == "c" || finfo.suffix() == "h" || finfo.suffix() == "hpp") {
+                QsciLexerCPP *qlcpp = new QsciLexerCPP(this);
+                qlcpp->setFont(font);
+                qsc->setLexer(qlcpp);
+
+            } else if (finfo.suffix() == "py") {
+                QsciLexerPython *qlpy = new QsciLexerPython(this);
+                qlpy->setFont(font);
+                qsc->setLexer(qlpy);
+            } else if (finfo.baseName() == "Makefile") {
+                QsciLexerMakefile *qlmk = new QsciLexerMakefile(this);
+                qlmk->setFont(font);
+                qsc->setLexer(qlmk);
+            } else {
+                //text document
+                qsc->setFont(font);
+            }
+
         }
-        ui->tabWidget->setTabToolTip(ui->tabWidget->currentIndex(),fname);
     }
 
     D("Open File");
@@ -202,18 +223,21 @@ void MainWindow::saveFile()
 {
     /* TODO: Merge with Save As */
 
-    D("Save File");
-    if (ui->tabWidget->tabToolTip(ui->tabWidget->currentIndex()) != "New File") {
-        QFile f(currentFile);
-        if (f.open(QIODevice::ReadOnly | QIODevice::Text | QIODevice::ReadWrite)) {
+    if (ui->tabWidget->tabToolTip(ui->tabWidget->currentIndex()) != QString::fromStdString("New File")) {
+        QFile f(ui->tabWidget->tabToolTip(ui->tabWidget->currentIndex()));
+        if (f.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text)) {
             QTextStream stream(&f);
             QFileInfo finfo(f);
             QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor"); // !
             ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), finfo.fileName());
             stream << qsc->text();
             f.close();
+            ui->tabWidget->setTabIcon(ui->tabWidget->currentIndex(),QIcon(":/icons/icons/c_source.png"));
+            // reload document
+            D("Save File");
         }
     } else {
+        D("Save File As Triggered");
         this->saveFileAs();
     }
 
@@ -234,7 +258,7 @@ void MainWindow::saveFileAs()
     if (fname != "")
     {
         QFile f(fname);
-        if (f.open(QIODevice::ReadOnly | QIODevice::Text | QIODevice::ReadWrite)) {
+        if (f.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text)) {
             QTextStream stream(&f);
             QFileInfo finfo(f);
             QsciScintilla *qsc = ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor"); // !
@@ -242,6 +266,8 @@ void MainWindow::saveFileAs()
             stream << qsc->text();
             f.close();
             ui->tabWidget->setTabToolTip(ui->tabWidget->currentIndex(),fname);
+            ui->tabWidget->setTabIcon(ui->tabWidget->currentIndex(),QIcon(":/icons/icons/c_source.png"));
+            // at this point reload document to track new changes
         }
     } else {
         D("Save Canceled.");
