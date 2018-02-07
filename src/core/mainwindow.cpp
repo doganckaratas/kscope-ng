@@ -18,6 +18,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "Qsci/qsciscintilla.h"
+#include "Qsci/qsciscintillabase.h"
 #include "Qsci/qscilexer.h"
 #include "Qsci/qscilexerpython.h"
 #include "Qsci/qscilexercpp.h"
@@ -157,6 +158,7 @@ void MainWindow::newFile()
     ui->tabWidget->setTabIcon(ui->tabWidget->currentIndex(),QIcon(":/icons/icons/c_source.png"));
     ui->actionSave->setEnabled(false);
     ui->tabWidget->setTabToolTip(ui->tabWidget->currentIndex(),"New File");
+    ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->SendScintilla(QsciScintillaBase::SCI_SETSAVEPOINT,0);
     setIconStates(true);
     D("New File");
 }
@@ -186,6 +188,7 @@ void MainWindow::openFile()
             ui->tabWidget->setObjectName(fname);
             ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setText(stream.readAll());
             ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setModified(false);
+            ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->SendScintilla(QsciScintillaBase::SCI_SETSAVEPOINT,0);
             /* Newline should be selectable from users,
              * which should has three options
              * -> Unix (\n)
@@ -237,6 +240,7 @@ void MainWindow::saveFile()
             // reload document
             connect(ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor"), SIGNAL(selectionChanged()), this, SLOT(editorSelection()));
             connect(ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor"), SIGNAL(textChanged()), this, SLOT(editorUpdate()));
+            ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->SendScintilla(QsciScintillaBase::SCI_SETSAVEPOINT,0);
             D("Save File");
         }
     } else {
@@ -270,6 +274,7 @@ void MainWindow::saveFileAs()
             ui->tabWidget->setTabToolTip(ui->tabWidget->currentIndex(),fname);
             ui->tabWidget->setTabIcon(ui->tabWidget->currentIndex(),QIcon(":/icons/icons/c_source.png"));
             // at this point reload document to track new changes
+            ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->SendScintilla(QsciScintillaBase::SCI_SETSAVEPOINT,0);
         }
     } else {
         D("Save Canceled.");
@@ -278,19 +283,58 @@ void MainWindow::saveFileAs()
 
 void MainWindow::closeFile(const int& index)
 {
-    D("Close Tab File");
+    // fix this and the other close routine
+    QMessageBox *qm = new QMessageBox(this);
+    if (ui->tabWidget->widget(index)->findChild<QsciScintilla *>("editor")->SendScintilla(QsciScintillaBase::SCI_GETMODIFY)) {
+        ui->tabWidget->setCurrentIndex(index);
+        if(qm->isHidden()) {
+            qm->setWindowTitle("Confirm Close");
+            qm->setIcon(QMessageBox::Question);
+            qm->setWindowModality(Qt::WindowModal);
+            qm->setText("File has been changed since last save. \nDo you want to save it?");
+            qm->addButton("Ignore", QMessageBox::NoRole);
+            qm->addButton(tr("Cancel"), QMessageBox::RejectRole);
+            QPushButton* pButtonYes = qm->addButton("Save", QMessageBox::YesRole);
+            qm->setDefaultButton(pButtonYes);
+            int ret = qm->exec();
+            if (ret == QMessageBox::Yes) {
+                MainWindow::saveFile();
+            }
+            if (ret == QMessageBox::Ignore) {
+                D("Close Tab File");
 
-    if (index == -1) {
-        return;
-    }
-    ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->close();
-    ui->tabWidget->widget(index)->deleteLater();
-    ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->deleteLater();
-    /*
-     * MEMORY LEAK, delete tab content  & document too. [DONE]
-     */
-    if (ui->tabWidget->count() <= 1) {
-        setIconStates(false);
+                if (index == -1) {
+                    return;
+                }
+                ui->tabWidget->widget(index)->findChild<QsciScintilla *>("editor")->close();
+                ui->tabWidget->widget(index)->findChild<QsciScintilla *>("editor")->deleteLater();
+                ui->tabWidget->widget(index)->deleteLater();
+
+                /*
+                 * MEMORY LEAK, delete tab content  & document too. [DONE]
+                 */
+                if (ui->tabWidget->count() <= 1) {
+                    setIconStates(false);
+                }
+            }
+        }
+        qm->deleteLater();
+    } else {
+        D("Close Tab File");
+
+        if (index == -1) {
+            return;
+        }
+        ui->tabWidget->widget(index)->findChild<QsciScintilla *>("editor")->close();
+        ui->tabWidget->widget(index)->findChild<QsciScintilla *>("editor")->deleteLater();
+        ui->tabWidget->widget(index)->deleteLater();
+
+        /*
+         * MEMORY LEAK, delete tab content  & document too. [DONE]
+         */
+        if (ui->tabWidget->count() <= 1) {
+            setIconStates(false);
+        }
     }
 }
 
