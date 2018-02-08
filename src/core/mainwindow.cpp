@@ -292,15 +292,15 @@ void MainWindow::closeFile(const int& index)
             qm->setIcon(QMessageBox::Question);
             qm->setWindowModality(Qt::WindowModal);
             qm->setText("File has been changed since last save. \nDo you want to save it?");
-            qm->addButton("Ignore", QMessageBox::NoRole);
-            qm->addButton(tr("Cancel"), QMessageBox::RejectRole);
+            qm->addButton("Cancel", QMessageBox::RejectRole);
+            qm->addButton("Close", QMessageBox::NoRole);
             QPushButton* pButtonYes = qm->addButton("Save", QMessageBox::YesRole);
             qm->setDefaultButton(pButtonYes);
             int ret = qm->exec();
             if (ret == QMessageBox::Yes) {
                 MainWindow::saveFile();
             }
-            if (ret == QMessageBox::Ignore) {
+            if (ret == QMessageBox::No) {
                 D("Close Tab File");
 
                 if (index == -1) {
