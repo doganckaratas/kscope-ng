@@ -138,6 +138,8 @@ void MainWindow::newFile()
     QHBoxLayout *qhbl = new QHBoxLayout(qtw);
     QsciScintilla *qsc = new QsciScintilla();
     qsc->setObjectName("editor");
+    qsc->setMarginsFont(QFont("Ubuntu Mono", 12, QFont::Normal, false));
+    qsc->setMarginLineNumbers(0,true);
     qsc->setMarginType(0, QsciScintilla::NumberMargin);
     qsc->setMarginWidth(0, "0000");
     qsc->setMarginsForegroundColor(QColor("#ff888888"));
@@ -194,26 +196,48 @@ void MainWindow::openFile()
              * -> Classic MacOS (\r)
              */
 
-            // lexer
+            // lexer | fix this !
 
-            QFont font = QFont("Ubuntu Mono", 12, QFont::Normal, false);
+            QFont norm_font = QFont("Ubuntu Mono", 12, QFont::Normal, false);
+            QFont ital_font = QFont("Ubuntu Mono", 12, QFont::Normal, true);
+            QFont bold_font = QFont("Ubuntu Mono", 12, QFont::Bold, false);
 
             if (finfo.suffix() == "cpp" || finfo.suffix() == "c" || finfo.suffix() == "h" || finfo.suffix() == "hpp") {
                 QsciLexerCPP *qlcpp = new QsciLexerCPP(this);
-                qlcpp->setFont(font);
+                /* colors: default black */
+                qlcpp->setFont(norm_font); // global font
+                qlcpp->setColor(QColor(128,128,128), QsciLexerCPP::Comment);
+                qlcpp->setColor(QColor(128,128,128), QsciLexerCPP::CommentLine);
+                qlcpp->setColor(QColor(0,0,255), QsciLexerCPP::CommentDoc);
+                qlcpp->setColor(QColor(0,0,255), QsciLexerCPP::CommentLineDoc);
+                qlcpp->setColor(QColor(202,96,202), QsciLexerCPP::CommentDocKeyword);
+                qlcpp->setColor(QColor(221,0,0), QsciLexerCPP::DoubleQuotedString);
+                qlcpp->setColor(QColor(255,0,255), QsciLexerCPP::SingleQuotedString);
+                qlcpp->setColor(QColor(0,127,0), QsciLexerCPP::PreProcessor);
+                qlcpp->setColor(QColor(127,0,0), QsciLexerCPP::KeywordSet2); //reserved words..
+                qlcpp->setColor(QColor(0,0,0), QsciLexerCPP::Keyword); //struct etc..
+                qlcpp->setColor(QColor(0,0,255), QsciLexerCPP::Number);
+                qlcpp->setHighlightEscapeSequences(true);
+                qlcpp->setColor(QColor(255,0,255), QsciLexerCPP::InactiveEscapeSequence);
+                /* fonts : default norm_font */
+                qlcpp->setFont(ital_font, QsciLexerCPP::Comment);
+                qlcpp->setFont(ital_font, QsciLexerCPP::CommentLine);
+                qlcpp->setFont(ital_font, QsciLexerCPP::CommentDoc);
+                qlcpp->setFont(ital_font, QsciLexerCPP::CommentLineDoc);
+                qlcpp->setFont(bold_font, QsciLexerCPP::CommentDocKeyword);
+                qlcpp->setFont(bold_font, QsciLexerCPP::Keyword);
                 ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setLexer(qlcpp);
-
             } else if (finfo.suffix() == "py") {
                 QsciLexerPython *qlpy = new QsciLexerPython(this);
-                qlpy->setFont(font);
+                qlpy->setFont(norm_font);
                 ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setLexer(qlpy);
             } else if (finfo.baseName() == "Makefile") {
                 QsciLexerMakefile *qlmk = new QsciLexerMakefile(this);
-                qlmk->setFont(font);
+                qlmk->setFont(norm_font);
                 ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setLexer(qlmk);
             } else {
                 //text document
-                ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setFont(font);
+                ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setFont(norm_font);
             }
 
         }
@@ -282,6 +306,7 @@ void MainWindow::saveFileAs()
 void MainWindow::closeFile(const int& index)
 {
     // fix this and the other close routine
+    // add close app event, cycle all modified inst's.
     QMessageBox qm;
     if (ui->tabWidget->widget(index)->findChild<QsciScintilla *>("editor")->SendScintilla(QsciScintillaBase::SCI_GETMODIFY)) {
         // if file was changed, focus to the file, otherwise silently close file

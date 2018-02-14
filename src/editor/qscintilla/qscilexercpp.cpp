@@ -322,20 +322,38 @@ QFont QsciLexerCPP::defaultFont(int style) const
 // Returns the set of keywords.
 const char *QsciLexerCPP::keywords(int set) const
 {
-    if (set == 1)
-        return
-            "and and_eq asm auto bitand bitor bool break case "
-            "catch char class compl const const_cast continue "
-            "default delete do double dynamic_cast else enum "
-            "explicit export extern false float for friend goto if "
-            "inline int long mutable namespace new not not_eq "
-            "operator or or_eq private protected public register "
-            "reinterpret_cast return short signed sizeof static "
-            "static_cast struct switch template this throw true "
-            "try typedef typeid typename union unsigned using "
-            "virtual void volatile wchar_t while xor xor_eq";
+//    if (set == 1)
+//        return
+//            "and and_eq asm auto bitand bitor bool break case "
+//            "catch char class compl const const_cast continue "
+//            "default delete do double dynamic_cast else enum "
+//            "explicit export extern false float for friend goto if "
+//            "inline int long mutable namespace new not not_eq "
+//            "operator or or_eq private protected public register "
+//            "reinterpret_cast return short signed sizeof static "
+//            "static_cast struct switch template this throw true "
+//            "try typedef typeid typename union unsigned using "
+//            "virtual void volatile wchar_t while xor xor_eq";
 
-    if (set == 3)
+    if (set == 1) /* primary */
+        return
+            "and and_eq asm bitand bitor bool break case "
+            "catch  class compl const_cast continue "
+            "default delete do dynamic_cast else enum "
+            "explicit export extern false for friend goto if "
+            "inline mutable namespace new not not_eq "
+            "operator or or_eq private protected public "
+            "reinterpret_cast return sizeof "
+            "static_cast struct switch template this throw true"
+            "try typedef typeid typename union using "
+            "virtual while xor xor_eq";
+
+    if (set == 2) /* secondary */
+        return
+            "auto char const double long int float register static "
+            "signed short void unsigned volatile wchar_t";
+
+    if (set == 3) /* documentation */
         return
             "a addindex addtogroup anchor arg attention author b "
             "brief bug c class code date def defgroup deprecated "
@@ -350,6 +368,10 @@ const char *QsciLexerCPP::keywords(int set) const
             "skipline struct subsection test throw todo typedef "
             "union until var verbatim verbinclude version warning "
             "weakgroup $ @ \\ & < > # { }";
+
+    if (set == 4) /* global classes / typedefs */
+        return 0;
+
 
     return 0;
 }
