@@ -138,7 +138,7 @@ void MainWindow::newFile()
     QHBoxLayout *qhbl = new QHBoxLayout(qtw);
     QsciScintilla *qsc = new QsciScintilla();
     qsc->setObjectName("editor");
-    qsc->setMarginsFont(QFont("Ubuntu Mono", 12, QFont::Normal, false));
+    qsc->setMarginsFont(QFont("Ubuntu Mono", 11, QFont::Normal, false));
     qsc->setMarginLineNumbers(0,true);
     qsc->setMarginType(0, QsciScintilla::NumberMargin);
     qsc->setMarginWidth(0, "0000");
@@ -198,46 +198,20 @@ void MainWindow::openFile()
 
             // lexer | fix this !
 
-            QFont norm_font = QFont("Ubuntu Mono", 12, QFont::Normal, false);
-            QFont ital_font = QFont("Ubuntu Mono", 12, QFont::Normal, true);
-            QFont bold_font = QFont("Ubuntu Mono", 12, QFont::Bold, false);
 
             if (finfo.suffix() == "cpp" || finfo.suffix() == "c" || finfo.suffix() == "h" || finfo.suffix() == "hpp") {
-                QsciLexerCPP *qlcpp = new QsciLexerCPP(this);
-                /* colors: default black */
-                qlcpp->setFont(norm_font); // global font
-                qlcpp->setColor(QColor(128,128,128), QsciLexerCPP::Comment);
-                qlcpp->setColor(QColor(128,128,128), QsciLexerCPP::CommentLine);
-                qlcpp->setColor(QColor(0,0,255), QsciLexerCPP::CommentDoc);
-                qlcpp->setColor(QColor(0,0,255), QsciLexerCPP::CommentLineDoc);
-                qlcpp->setColor(QColor(202,96,202), QsciLexerCPP::CommentDocKeyword);
-                qlcpp->setColor(QColor(221,0,0), QsciLexerCPP::DoubleQuotedString);
-                qlcpp->setColor(QColor(255,0,255), QsciLexerCPP::SingleQuotedString);
-                qlcpp->setColor(QColor(0,127,0), QsciLexerCPP::PreProcessor);
-                qlcpp->setColor(QColor(127,0,0), QsciLexerCPP::KeywordSet2); //reserved words..
-                qlcpp->setColor(QColor(0,0,0), QsciLexerCPP::Keyword); //struct etc..
-                qlcpp->setColor(QColor(0,0,255), QsciLexerCPP::Number);
-                qlcpp->setHighlightEscapeSequences(true);
-                qlcpp->setColor(QColor(255,0,255), QsciLexerCPP::InactiveEscapeSequence);
-                /* fonts : default norm_font */
-                qlcpp->setFont(ital_font, QsciLexerCPP::Comment);
-                qlcpp->setFont(ital_font, QsciLexerCPP::CommentLine);
-                qlcpp->setFont(ital_font, QsciLexerCPP::CommentDoc);
-                qlcpp->setFont(ital_font, QsciLexerCPP::CommentLineDoc);
-                qlcpp->setFont(bold_font, QsciLexerCPP::CommentDocKeyword);
-                qlcpp->setFont(bold_font, QsciLexerCPP::Keyword);
-                ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setLexer(qlcpp);
+                setupLexer(LEXER_CPP);
             } else if (finfo.suffix() == "py") {
                 QsciLexerPython *qlpy = new QsciLexerPython(this);
-                qlpy->setFont(norm_font);
+//                qlpy->setFont(norm_font);
                 ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setLexer(qlpy);
             } else if (finfo.baseName() == "Makefile") {
                 QsciLexerMakefile *qlmk = new QsciLexerMakefile(this);
-                qlmk->setFont(norm_font);
+//                qlmk->setFont(norm_font);
                 ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setLexer(qlmk);
             } else {
                 //text document
-                ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setFont(norm_font);
+//                ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setFont(norm_font);
             }
 
         }
@@ -367,6 +341,52 @@ void MainWindow::closeFile()
 {
     D("Close Current File");
     MainWindow::closeFile(ui->tabWidget->currentIndex());
+}
+
+void MainWindow::setupLexer(enum LexerType l)
+{
+    QFont norm_font = QFont("Ubuntu Mono", 11, QFont::Normal, false);
+    QFont ital_font = QFont("Ubuntu Mono", 11, QFont::Normal, true);
+    QFont bold_font = QFont("Ubuntu Mono", 11, QFont::Bold, false);
+
+    switch (l) {
+        case LEXER_DEFAULT:
+        case LEXER_CPP:
+            QsciLexerCPP cpp;
+            /* colors: default black */
+            cpp.setFont(norm_font); // global font
+            cpp.setColor(QColor(128,128,128), QsciLexerCPP::Comment);
+            cpp.setColor(QColor(128,128,128), QsciLexerCPP::CommentLine);
+            cpp.setColor(QColor(0,0,255), QsciLexerCPP::CommentDoc);
+            cpp.setColor(QColor(0,0,255), QsciLexerCPP::CommentLineDoc);
+            cpp.setColor(QColor(202,96,202), QsciLexerCPP::CommentDocKeyword);
+            cpp.setColor(QColor(221,0,0), QsciLexerCPP::DoubleQuotedString);
+            cpp.setColor(QColor(255,0,255), QsciLexerCPP::SingleQuotedString);
+            cpp.setColor(QColor(0,127,0), QsciLexerCPP::PreProcessor);
+            cpp.setColor(QColor(127,0,0), QsciLexerCPP::KeywordSet2); //reserved words..
+            cpp.setColor(QColor(0,0,0), QsciLexerCPP::Keyword); //struct etc..
+            cpp.setColor(QColor(0,0,255), QsciLexerCPP::Number);
+            cpp.setColor(QColor(0,0,0), QsciLexerCPP::Operator); // paranthesis
+            cpp.setHighlightEscapeSequences(true);
+            cpp.setColor(QColor(255,0,255), QsciLexerCPP::EscapeSequence);
+            /* fonts : default norm_font */
+            cpp.setFont(ital_font, QsciLexerCPP::Comment);
+            cpp.setFont(ital_font, QsciLexerCPP::CommentLine);
+            cpp.setFont(ital_font, QsciLexerCPP::CommentDoc);
+            cpp.setFont(ital_font, QsciLexerCPP::CommentLineDoc);
+            cpp.setFont(bold_font, QsciLexerCPP::CommentDocKeyword);
+            cpp.setFont(bold_font, QsciLexerCPP::Keyword);
+            ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setLexer(&cpp);
+            break;
+//        case LEXER_MAKEFILE:
+//            break;
+//        case LEXER_PYTHON:
+//            break;
+//        case LEXER_JAVA:
+//            break;
+//        default:
+//            break;
+    }
 }
 
 void MainWindow::editorTabChanged(int index)

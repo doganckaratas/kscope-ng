@@ -322,19 +322,6 @@ QFont QsciLexerCPP::defaultFont(int style) const
 // Returns the set of keywords.
 const char *QsciLexerCPP::keywords(int set) const
 {
-//    if (set == 1)
-//        return
-//            "and and_eq asm auto bitand bitor bool break case "
-//            "catch char class compl const const_cast continue "
-//            "default delete do double dynamic_cast else enum "
-//            "explicit export extern false float for friend goto if "
-//            "inline int long mutable namespace new not not_eq "
-//            "operator or or_eq private protected public register "
-//            "reinterpret_cast return short signed sizeof static "
-//            "static_cast struct switch template this throw true "
-//            "try typedef typeid typename union unsigned using "
-//            "virtual void volatile wchar_t while xor xor_eq";
-
     if (set == 1) /* primary */
         return
             "and and_eq asm bitand bitor bool break case "
@@ -344,14 +331,14 @@ const char *QsciLexerCPP::keywords(int set) const
             "inline mutable namespace new not not_eq "
             "operator or or_eq private protected public "
             "reinterpret_cast return sizeof "
-            "static_cast struct switch template this throw true"
+            "static_cast struct switch template this throw true "
             "try typedef typeid typename union using "
             "virtual while xor xor_eq";
 
     if (set == 2) /* secondary */
         return
             "auto char const double long int float register static "
-            "signed short void unsigned volatile wchar_t";
+            "signed short void unsigned volatile wchar_t ";
 
     if (set == 3) /* documentation */
         return
@@ -363,15 +350,14 @@ const char *QsciLexerCPP::keywords(int set) const
             "htmlinclude htmlonly if image include ingroup "
             "internal invariant interface latexonly li line link "
             "mainpage name namespace nosubgrouping note overload "
-            "p page par param post pre ref relates remarks return "
-            "retval sa section see showinitializer since skip "
-            "skipline struct subsection test throw todo typedef "
+            "p page par param param[in] param[out] post pre ref "
+            "relates remarks return retval sa section see showinitializer "
+            "since skip skipline struct subsection test throw todo typedef "
             "union until var verbatim verbinclude version warning "
-            "weakgroup $ @ \\ & < > # { }";
+            "weakgroup $ @ \\ & < > # { } ";
 
     if (set == 4) /* global classes / typedefs */
         return 0;
-
 
     return 0;
 }

@@ -33,7 +33,14 @@ private:
     int getFirstTabIdFromName(QTabWidget *qtw, std::string name);
     void setupSignals();
     void setIconStates(bool state);
-    
+    enum LexerType{
+        LEXER_DEFAULT = 0,
+        LEXER_CPP,
+        LEXER_PYTHON,
+        LEXER_MAKEFILE,
+        LEXER_JAVA
+    };
+
 private slots:
     void newFile();
     void openFile();
@@ -41,6 +48,7 @@ private slots:
     void saveFileAs();
     void closeFile();
     void closeFile(const int& index);
+    void setupLexer(enum LexerType l);
     void editorTabChanged(int index);
     void editorSelection();
     void editorUpdate();
