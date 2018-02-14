@@ -74,6 +74,7 @@ void MainWindow::setupSignals()
     connect(ui->actionCut, SIGNAL(triggered()), this, SLOT(editorCut()));
     connect(ui->actionCopy, SIGNAL(triggered()), this, SLOT(editorCopy()));
     connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(editorTabChanged(int)));
+    connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeFile(int)));
     /*
      * TODO: set up all action handlers
      */
@@ -144,7 +145,6 @@ void MainWindow::newFile()
     qtw->setTabText(qtw->indexOf(qtw), "New File");
     qtw->setDocumentMode(true);
     qtw->setObjectName("tab");
-    connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeFile(int)));
     connect(qsc, SIGNAL(selectionChanged()), this, SLOT(editorSelection()));
     connect(qsc, SIGNAL(textChanged()), this, SLOT(editorUpdate()));
     connect(qsc, SIGNAL(modificationChanged(bool)), this, SLOT(editorModified(bool)));
@@ -181,8 +181,6 @@ void MainWindow::openFile()
             QFileInfo finfo(f);
             //qsc->setLexer(new QsciLexerCPP(this));
             ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setFocus();
-            connect(ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor"), SIGNAL(selectionChanged()), this, SLOT(editorSelection()));
-            connect(ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor"), SIGNAL(textChanged()), this, SLOT(editorUpdate()));
             ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), finfo.fileName());
             ui->tabWidget->setTabToolTip(ui->tabWidget->currentIndex(),fname);
             ui->tabWidget->setObjectName(fname);
@@ -284,25 +282,25 @@ void MainWindow::saveFileAs()
 void MainWindow::closeFile(const int& index)
 {
     // fix this and the other close routine
-    QMessageBox *qm = new QMessageBox(this);
+    QMessageBox qm;
     if (ui->tabWidget->widget(index)->findChild<QsciScintilla *>("editor")->SendScintilla(QsciScintillaBase::SCI_GETMODIFY)) {
+        // if file was changed, focus to the file, otherwise silently close file
         ui->tabWidget->setCurrentIndex(index);
-        if(qm->isHidden()) {
-            qm->setWindowTitle("Confirm Close");
-            qm->setIcon(QMessageBox::Question);
-            qm->setWindowModality(Qt::WindowModal);
-            qm->setText("File has been changed since last save. \nDo you want to save it?");
-            qm->addButton("Cancel", QMessageBox::RejectRole);
-            qm->addButton("Close", QMessageBox::NoRole);
-            QPushButton* pButtonYes = qm->addButton("Save", QMessageBox::YesRole);
-            qm->setDefaultButton(pButtonYes);
-            int ret = qm->exec();
-            if (ret == QMessageBox::Yes) {
+        if(qm.isHidden()) {
+            qm.setWindowTitle("Confirm Close");
+            qm.setIcon(QMessageBox::Question);
+            qm.setWindowModality(Qt::WindowModal);
+            qm.setText("File has been changed since last save.");
+            qm.setInformativeText("Do you want to save it?");
+            qm.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+            qm.setDefaultButton(QMessageBox::Save);
+            int ret = qm.exec();
+            if (ret == QMessageBox::Save) {
+                D("Save Clicked");
                 MainWindow::saveFile();
             }
-            if (ret == QMessageBox::No) {
-                D("Close Tab File");
-
+            if (ret == QMessageBox::Discard) {
+                D("Discard Clicked");
                 if (index == -1) {
                     return;
                 }
@@ -317,8 +315,10 @@ void MainWindow::closeFile(const int& index)
                     setIconStates(false);
                 }
             }
+            if (ret == QMessageBox::Cancel) {
+                D("Cancel Clicked");
+            }
         }
-        qm->deleteLater();
     } else {
         D("Close Tab File");
 
@@ -341,16 +341,7 @@ void MainWindow::closeFile(const int& index)
 void MainWindow::closeFile()
 {
     D("Close Current File");
-    int idx = ui->tabWidget->currentIndex();
-    if (idx == -1) {
-        return;
-    }
-    ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->close();
-    ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->deleteLater();
-    ui->tabWidget->widget(idx)->deleteLater();
-    if (ui->tabWidget->count() <= 1) {
-        setIconStates(false);
-    }
+    MainWindow::closeFile(ui->tabWidget->currentIndex());
 }
 
 void MainWindow::editorTabChanged(int index)
