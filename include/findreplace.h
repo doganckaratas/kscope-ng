@@ -2,9 +2,10 @@
 #define FINDREPLACE_H
 
 #include <QDialog>
+#include <QString>
 
 namespace Ui {
-class FindReplace;
+    class FindReplace;
 }
 
 class FindReplace : public QDialog
@@ -17,6 +18,12 @@ public:
 
 private:
     Ui::FindReplace *ui;
+
+private slots:
+    void findFirstClicked();
+
+signals:
+    void findFirstRequest(QString string, bool re, bool cs, bool wo, bool wr);
 };
 
 #endif // FINDREPLACE_H

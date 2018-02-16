@@ -59,7 +59,7 @@ private slots:
     void editorUndo();
     void editorRedo();
     void editorFindReplaceDialog();
-    void editorFindReplaceFinished(int status);
+    void editorFindFirstResponse(QString string, bool re, bool cs, bool wo, bool wr);
     void editorCut();
     void editorCopy();
     void editorPaste();

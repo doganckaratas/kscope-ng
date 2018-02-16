@@ -18,12 +18,12 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout" name="findReplaceVertical">
      <property name="sizeConstraint">
       <enum>QLayout::SetMaximumSize</enum>
      </property>
      <item>
-      <widget class="QTabWidget" name="tabWidget">
+      <widget class="QTabWidget" name="findReplaceTabWidget">
        <property name="autoFillBackground">
         <bool>false</bool>
        </property>
@@ -57,30 +57,30 @@
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout">
+          <layout class="QHBoxLayout" name="findHorizontal">
            <item>
-            <widget class="QLabel" name="label">
+            <widget class="QLabel" name="findLabel">
              <property name="text">
               <string>Find:</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEdit"/>
+            <widget class="QLineEdit" name="findEditText"/>
            </item>
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <layout class="QHBoxLayout" name="findSearchParams1">
            <item>
-            <widget class="QCheckBox" name="checkBox">
+            <widget class="QCheckBox" name="findRegularExpressionCheckBox">
              <property name="text">
               <string>Regular Expression</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="checkBox_2">
+            <widget class="QCheckBox" name="findCaseSensitiveCheckBox">
              <property name="text">
               <string>Case Sensitive</string>
              </property>
@@ -89,16 +89,16 @@
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <layout class="QHBoxLayout" name="findSearchParams2">
            <item>
-            <widget class="QCheckBox" name="checkBox_4">
+            <widget class="QCheckBox" name="findExactWordCheckBox">
              <property name="text">
               <string>Exact Word Match</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="checkBox_3">
+            <widget class="QCheckBox" name="findWrapSearchCheckBox">
              <property name="text">
               <string>Wrap Search</string>
              </property>
@@ -107,23 +107,23 @@
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <layout class="QHBoxLayout" name="findButtons">
            <item>
-            <widget class="QPushButton" name="pushButton_3">
+            <widget class="QPushButton" name="findButton">
              <property name="text">
               <string>Find</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_2">
+            <widget class="QPushButton" name="findNextButton">
              <property name="text">
               <string>Find Next</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton">
+            <widget class="QPushButton" name="findCancelButton">
              <property name="text">
               <string>Cancel</string>
              </property>

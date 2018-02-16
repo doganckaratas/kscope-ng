@@ -77,7 +77,8 @@ void MainWindow::setupSignals()
     connect(ui->actionFind, SIGNAL(triggered(bool)), this, SLOT(editorFindReplaceDialog()));
     connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(editorTabChanged(int)));
     connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeFile(int)));
-    connect(fr, SIGNAL(finished(int)), this, SLOT(editorFindReplaceFinished(int)));
+    connect(fr, SIGNAL(findFirstRequest(QString,bool,bool,bool,bool)), this, SLOT(editorFindFirstResponse(QString,bool,bool,bool,bool)));
+
     /*
      * TODO: set up all action handlers
      */
@@ -353,8 +354,10 @@ void MainWindow::setupLexer(enum LexerType l)
     QFont bold_font = QFont("Ubuntu Mono", 11, QFont::Bold, false);
 
     switch (l) {
-        case LEXER_DEFAULT:
-        case LEXER_CPP:
+        case LEXER_DEFAULT: {
+            break;
+        }
+        case LEXER_CPP: {
             QsciLexerCPP cpp;
             /* colors: default black */
             cpp.setFont(norm_font); // global font
@@ -381,14 +384,19 @@ void MainWindow::setupLexer(enum LexerType l)
             cpp.setFont(bold_font, QsciLexerCPP::Keyword);
             ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setLexer(&cpp);
             break;
-//        case LEXER_MAKEFILE:
-//            break;
-//        case LEXER_PYTHON:
-//            break;
-//        case LEXER_JAVA:
-//            break;
-//        default:
-//            break;
+        }
+        case LEXER_MAKEFILE: {
+            break;
+        }
+        case LEXER_PYTHON: {
+            break;
+        }
+        case LEXER_JAVA: {
+            break;
+        }
+        default: {
+            break;
+        }
     }
 }
 
@@ -398,9 +406,9 @@ void MainWindow::editorFindReplaceDialog()
     D("Find Dialog");
 }
 
-void MainWindow::editorFindReplaceFinished(int status)
+void MainWindow::editorFindFirstResponse(QString string, bool re, bool cs, bool wo, bool wr)
 {
-    D("STATUS: " + QString::number(status).toStdString());
+    ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->findFirst(string, re, cs, wo, wr);
 }
 
 void MainWindow::editorTabChanged(int index)
