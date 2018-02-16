@@ -8,7 +8,7 @@
 # Add INSTALLS directives for qscintilla
 
 
-include(./src/editor/qscintilla.pri)
+include(./editor/qscintilla.pri)
 
 QT       += core gui
 
@@ -32,22 +32,24 @@ TARGET = kscope-ng
 TEMPLATE = app
 
 SOURCES +=  \
-            ./src/core/main.cpp \
-            ./src/core/mainwindow.cpp
-
+            ./core/main.cpp \
+            ./core/mainwindow.cpp \
+            ./core/findreplace.cpp
 
 HEADERS  += \
-            ./src/include/mainwindow.h
+            ./include/mainwindow.h \
+            ./include/findreplace.h
 
 INCLUDEPATH += \
-            ./src/include \
-            ./src/editor/qscintilla \
-            ./src/editor/include \
-            ./src/editor/lexlib \
-            ./src/editor/src
+            ./include \
+            ./editor/qscintilla \
+            ./editor/include \
+            ./editor/lexlib \
+            ./editor/src
 
 DEFINES += SCINTILLA_QT SCI_LEXER
 
-FORMS    += ./src/view/mainwindow.ui
+FORMS    += ./view/mainwindow.ui \
+            ./view/findreplace.ui
 
 RESOURCES += ./res/resources.qrc
