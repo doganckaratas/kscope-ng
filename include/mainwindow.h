@@ -10,6 +10,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "findreplace.h"
 
 #define RELEASE_DATE    "06/02/2018\n"
 #define VERSION         "v0.7_PRE_RELEASE"
@@ -30,6 +31,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    FindReplace *fr;
+    bool isFindDialogShown = false;
     int getFirstTabIdFromName(QTabWidget *qtw, std::string name);
     void setupSignals();
     void setIconStates(bool state);
@@ -55,6 +58,8 @@ private slots:
     void editorModified(bool status);
     void editorUndo();
     void editorRedo();
+    void editorFindReplaceDialog();
+    void editorFindReplaceFinished(int status);
     void editorCut();
     void editorCopy();
     void editorPaste();

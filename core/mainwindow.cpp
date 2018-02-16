@@ -48,6 +48,7 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    fr = new FindReplace(this);
     MainWindow::setWindowTitle(QString::fromStdString("KScope-NG ") +
                                QString::fromStdString(VERSION));
     /*
@@ -73,8 +74,10 @@ void MainWindow::setupSignals()
     connect(ui->actionRedo, SIGNAL(triggered()), this, SLOT(editorRedo()));
     connect(ui->actionCut, SIGNAL(triggered()), this, SLOT(editorCut()));
     connect(ui->actionCopy, SIGNAL(triggered()), this, SLOT(editorCopy()));
+    connect(ui->actionFind, SIGNAL(triggered(bool)), this, SLOT(editorFindReplaceDialog()));
     connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(editorTabChanged(int)));
     connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeFile(int)));
+    connect(fr, SIGNAL(finished(int)), this, SLOT(editorFindReplaceFinished(int)));
     /*
      * TODO: set up all action handlers
      */
@@ -389,9 +392,20 @@ void MainWindow::setupLexer(enum LexerType l)
     }
 }
 
+void MainWindow::editorFindReplaceDialog()
+{
+    fr->show();
+    D("Find Dialog");
+}
+
+void MainWindow::editorFindReplaceFinished(int status)
+{
+    D("STATUS: " + QString::number(status).toStdString());
+}
+
 void MainWindow::editorTabChanged(int index)
 {
-     D("Tab Changed to " + index);
+     D("Tab Changed to " + QString::number(index).toStdString());
 }
 
 void MainWindow::editorUpdate()
@@ -525,5 +539,6 @@ int MainWindow::getFirstTabIdFromName(QTabWidget *qtw, std::string name)
 
 MainWindow::~MainWindow()
 {
+    delete fr;
     delete ui;
 }
