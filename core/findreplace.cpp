@@ -1,5 +1,19 @@
+/**
+ * @brief kscope-ng
+ * A Qt based C/C++ IDE Project
+ * @author Dogan C. Karatas
+ * @date 2018
+ * @file findreplace.cpp
+ */
+
 #include "findreplace.h"
 #include "ui_findreplace.h"
+
+/** === Roadmap ===
+ *  @todo add cursor position to replace all, and cycle once
+ *  @todo
+ */
+
 
 FindReplace::FindReplace(QWidget *parent) : QDialog(parent), ui(new Ui::FindReplace) {
     ui->setupUi(this);

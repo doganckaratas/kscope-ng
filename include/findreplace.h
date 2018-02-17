@@ -1,3 +1,11 @@
+/**
+ * @brief kscope-ng
+ * A Qt based C/C++ IDE Project
+ * @author Dogan C. Karatas
+ * @date 2018
+ * @file findreplace.h
+ */
+
 #ifndef FINDREPLACE_H
 #define FINDREPLACE_H
 
