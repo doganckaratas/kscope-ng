@@ -36,7 +36,7 @@
  *  @todo Add Dynamic Line Numbering
  *  @todo Add Custom highlighters
  *  @todo Run QScintilla component and its' instances in another thread
- *  @todo Add Find&Replace
+ *  [OK] @todo Add Find&Replace
  *  @todo Add CScope wrapper
  *  @todo Refactor marked methods
  *  @todo Delete View XML and implement them with C++ (same with #4)
@@ -74,7 +74,8 @@ void MainWindow::setupSignals()
     connect(ui->actionRedo, SIGNAL(triggered()), this, SLOT(editorRedo()));
     connect(ui->actionCut, SIGNAL(triggered()), this, SLOT(editorCut()));
     connect(ui->actionCopy, SIGNAL(triggered()), this, SLOT(editorCopy()));
-    connect(ui->actionFind, SIGNAL(triggered(bool)), this, SLOT(editorFindReplaceDialog()));
+    connect(ui->actionFind, SIGNAL(triggered()), this, SLOT(editorFindDialog()));
+    connect(ui->actionReplace, SIGNAL(triggered()), this, SLOT(editorReplaceDialog()));
     connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(editorTabChanged(int)));
     connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeFile(int)));
     connect(fr, SIGNAL(findRequest(QString, bool, bool, bool, bool)), this, SLOT(editorFindResponse(QString, bool, bool, bool, bool)));
@@ -401,10 +402,16 @@ void MainWindow::setupLexer(enum LexerType l)
     }
 }
 
-void MainWindow::editorFindReplaceDialog()
+void MainWindow::editorFindDialog()
 {
-    fr->show();
+    fr->showFind();
     D("Find Dialog");
+}
+
+void MainWindow::editorReplaceDialog()
+{
+    fr->showReplace();
+    D("Replace Dialog");
 }
 
 void MainWindow::editorFindResponse(QString string, bool re, bool cs, bool wo, bool wr)

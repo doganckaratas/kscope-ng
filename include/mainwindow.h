@@ -57,7 +57,8 @@ private slots:
     void editorModified(bool status);
     void editorUndo();
     void editorRedo();
-    void editorFindReplaceDialog();
+    void editorFindDialog();
+    void editorReplaceDialog();
     void editorFindResponse(QString string, bool re, bool cs, bool wo, bool wr);
     void editorReplaceResponse(QString from, QString to, bool re, bool cs, bool wo, bool wr, bool all);
     void editorCut();

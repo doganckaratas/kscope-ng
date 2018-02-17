@@ -41,6 +41,18 @@ void FindReplace::replaceAllClicked()
                         true);
 }
 
+void FindReplace::showFind()
+{
+    ui->findReplaceTabWidget->setCurrentIndex(0);
+    this->show();
+}
+
+void FindReplace::showReplace()
+{
+    ui->findReplaceTabWidget->setCurrentIndex(1);
+    this->show();
+}
+
 FindReplace::~FindReplace()
 {
     delete ui;
