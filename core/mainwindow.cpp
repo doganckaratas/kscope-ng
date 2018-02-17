@@ -77,7 +77,8 @@ void MainWindow::setupSignals()
     connect(ui->actionFind, SIGNAL(triggered(bool)), this, SLOT(editorFindReplaceDialog()));
     connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(editorTabChanged(int)));
     connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeFile(int)));
-    connect(fr, SIGNAL(findFirstRequest(QString,bool,bool,bool,bool)), this, SLOT(editorFindFirstResponse(QString,bool,bool,bool,bool)));
+    connect(fr, SIGNAL(findRequest(QString, bool, bool, bool, bool)), this, SLOT(editorFindResponse(QString, bool, bool, bool, bool)));
+    connect(fr, SIGNAL(replaceRequest(QString, QString, bool, bool, bool, bool, bool)), this, SLOT(editorReplaceResponse(QString,QString,bool, bool, bool, bool, bool)));
 
     /*
      * TODO: set up all action handlers
@@ -207,15 +208,15 @@ void MainWindow::openFile()
                 setupLexer(LEXER_CPP);
             } else if (finfo.suffix() == "py") {
                 QsciLexerPython *qlpy = new QsciLexerPython(this);
-//                qlpy->setFont(norm_font);
+                //qlpy->setFont(norm_font);
                 ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setLexer(qlpy);
             } else if (finfo.baseName() == "Makefile") {
                 QsciLexerMakefile *qlmk = new QsciLexerMakefile(this);
-//                qlmk->setFont(norm_font);
+                //qlmk->setFont(norm_font);
                 ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setLexer(qlmk);
             } else {
                 //text document
-//                ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setFont(norm_font);
+                //ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->setFont(norm_font);
             }
 
         }
@@ -406,9 +407,20 @@ void MainWindow::editorFindReplaceDialog()
     D("Find Dialog");
 }
 
-void MainWindow::editorFindFirstResponse(QString string, bool re, bool cs, bool wo, bool wr)
+void MainWindow::editorFindResponse(QString string, bool re, bool cs, bool wo, bool wr)
 {
     ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->findFirst(string, re, cs, wo, wr);
+}
+
+void MainWindow::editorReplaceResponse(QString from, QString to, bool re, bool cs, bool wo, bool wr, bool all)
+{
+    if (!all) {
+        if (ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->findFirst(from, re, cs, wo, wr))
+            ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->replace(to);
+    } else {
+        while (ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->findFirst(from, re, cs, wo, wr))
+            ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->replace(to);
+    }
 }
 
 void MainWindow::editorTabChanged(int index)

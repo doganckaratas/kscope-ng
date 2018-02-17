@@ -20,10 +20,14 @@ private:
     Ui::FindReplace *ui;
 
 private slots:
-    void findFirstClicked();
+    void findClicked();
+    void replaceClicked();
+    void replaceAllClicked();
+
 
 signals:
-    void findFirstRequest(QString string, bool re, bool cs, bool wo, bool wr);
+    void findRequest(QString string, bool re, bool cs, bool wo, bool wr);
+    void replaceRequest(QString from, QString to, bool re, bool cs, bool wo, bool wr, bool all);
 };
 
 #endif // FINDREPLACE_H

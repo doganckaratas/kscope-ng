@@ -2,23 +2,26 @@
 <ui version="4.0">
  <class>FindReplace</class>
  <widget class="QDialog" name="FindReplace">
-  <property name="windowModality">
-   <enum>Qt::NonModal</enum>
-  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>415</width>
-    <height>261</height>
+    <height>257</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Find &amp; Replace</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QVBoxLayout" name="findReplaceVertical">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
      <property name="sizeConstraint">
       <enum>QLayout::SetMaximumSize</enum>
      </property>
@@ -60,6 +63,12 @@
           <layout class="QHBoxLayout" name="findHorizontal">
            <item>
             <widget class="QLabel" name="findLabel">
+             <property name="minimumSize">
+              <size>
+               <width>100</width>
+               <height>0</height>
+              </size>
+             </property>
              <property name="text">
               <string>Find:</string>
              </property>
@@ -69,6 +78,19 @@
             <widget class="QLineEdit" name="findEditText"/>
            </item>
           </layout>
+         </item>
+         <item>
+          <spacer name="findVertical">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>1</height>
+            </size>
+           </property>
+          </spacer>
          </item>
          <item>
           <layout class="QHBoxLayout" name="findSearchParams1">
@@ -116,13 +138,6 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="findNextButton">
-             <property name="text">
-              <string>Find Next</string>
-             </property>
-            </widget>
-           </item>
-           <item>
             <widget class="QPushButton" name="findCancelButton">
              <property name="text">
               <string>Cancel</string>
@@ -137,6 +152,122 @@
         <attribute name="title">
          <string>Replace</string>
         </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <layout class="QHBoxLayout" name="replaceFromHorizontal">
+           <item>
+            <widget class="QLabel" name="replaceFromLabel">
+             <property name="minimumSize">
+              <size>
+               <width>100</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Find:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="replaceFromEditText"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="replaceToHorizontal">
+           <item>
+            <widget class="QLabel" name="replaceToLabel">
+             <property name="minimumSize">
+              <size>
+               <width>100</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Replace:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="replaceToEditText"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <spacer name="replaceVertical">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>1</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="replaceSearchParams1">
+           <item>
+            <widget class="QCheckBox" name="replaceRegularExpressionCheckBox">
+             <property name="text">
+              <string>Regular Expression</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="replaceCaseSensitiveCheckBox">
+             <property name="text">
+              <string>Case Sensitive</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="replaceSearchParams2">
+           <item>
+            <widget class="QCheckBox" name="replaceExactWordCheckBox">
+             <property name="text">
+              <string>Exact Word Match</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="replaceWrapSearchCheckBox">
+             <property name="text">
+              <string>Wrap Search</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="replaceButtons">
+           <item>
+            <widget class="QPushButton" name="replaceButton">
+             <property name="text">
+              <string>Replace</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="replaceAllButton">
+             <property name="text">
+              <string>Replace All</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="replaceCancelButton">
+             <property name="text">
+              <string>Cancel</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </widget>
       </widget>
      </item>

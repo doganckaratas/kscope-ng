@@ -18,7 +18,7 @@
 #define D(arg)          statusBar()->showMessage("DEBUG: " + QString::fromStdString(arg),1000)
 
 namespace Ui {
-class MainWindow;
+    class MainWindow;
 }
 
 class MainWindow : public QMainWindow
@@ -32,7 +32,6 @@ public:
 private:
     Ui::MainWindow *ui;
     FindReplace *fr;
-    bool isFindDialogShown = false;
     int getFirstTabIdFromName(QTabWidget *qtw, std::string name);
     void setupSignals();
     void setIconStates(bool state);
@@ -59,7 +58,8 @@ private slots:
     void editorUndo();
     void editorRedo();
     void editorFindReplaceDialog();
-    void editorFindFirstResponse(QString string, bool re, bool cs, bool wo, bool wr);
+    void editorFindResponse(QString string, bool re, bool cs, bool wo, bool wr);
+    void editorReplaceResponse(QString from, QString to, bool re, bool cs, bool wo, bool wr, bool all);
     void editorCut();
     void editorCopy();
     void editorPaste();
