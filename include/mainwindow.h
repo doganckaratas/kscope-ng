@@ -50,6 +50,7 @@ private slots:
     void saveFileAs();
     void closeFile();
     void closeFile(const int& index);
+    void getFiles(QString files);
     void setupLexer(enum LexerType l);
     void editorTabChanged(int index);
     void editorSelection();

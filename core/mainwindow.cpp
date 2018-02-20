@@ -14,6 +14,8 @@
 #include <QFileInfo>
 #include <QFileDialog>
 #include <QTextStream>
+#include <QDirIterator>
+#include <QStandardItem>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -202,6 +204,9 @@ void MainWindow::openFile()
              * -> Classic MacOS (\r)
              */
 
+            // get recursive file list
+            MainWindow::getFiles(finfo.absolutePath());
+
             // lexer | fix this !
 
 
@@ -347,6 +352,42 @@ void MainWindow::closeFile()
 {
     D("Close Current File");
     MainWindow::closeFile(ui->tabWidget->currentIndex());
+}
+
+void MainWindow::getFiles(QString files)
+{
+    /* TODO: It missing first file, fix it. */
+    ui->treeFiles->clear();
+    QList<QTreeWidgetItem *> items;
+    QTreeWidgetItem *itm;
+    QDirIterator dir(files,QDirIterator::Subdirectories);
+    while (dir.hasNext()) {
+        if (QFileInfo(dir.filePath()).isFile()) {
+            if (QFileInfo(dir.filePath()).suffix() == "c") {
+                itm = new QTreeWidgetItem(0);
+                itm->setText(0, "c");
+                itm->setText(1, QFileInfo(dir.filePath()).fileName());
+                items.append(itm);
+            } else if (QFileInfo(dir.filePath()).suffix() == "h") {
+                itm = new QTreeWidgetItem(0);
+                itm->setText(0, "h");
+                itm->setText(1, QFileInfo(dir.filePath()).fileName());
+                items.append(itm);
+            } else if (QFileInfo(dir.filePath()).suffix() == "cpp") {
+                itm = new QTreeWidgetItem(0);
+                itm->setText(0, "cpp");
+                itm->setText(1, QFileInfo(dir.filePath()).fileName());
+                items.append(itm);
+            } else {
+                ;
+            }
+        } else {
+            ;
+        }
+        dir.next();
+    }
+    ui->treeFiles->addTopLevelItems(items);
+    delete itm;
 }
 
 void MainWindow::setupLexer(enum LexerType l)

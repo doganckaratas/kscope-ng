@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>1150</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuEdit">
@@ -305,9 +305,26 @@
     <layout class="QVBoxLayout" name="verticalLayout_10">
      <item>
       <widget class="QTreeWidget" name="treeFiles">
+       <property name="animated">
+        <bool>true</bool>
+       </property>
+       <attribute name="headerDefaultSectionSize">
+        <number>60</number>
+       </attribute>
+       <attribute name="headerMinimumSectionSize">
+        <number>20</number>
+       </attribute>
+       <attribute name="headerShowSortIndicator" stdset="0">
+        <bool>false</bool>
+       </attribute>
        <column>
         <property name="text">
-         <string notr="true">1</string>
+         <string>T</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string notr="true">Name</string>
         </property>
        </column>
       </widget>
