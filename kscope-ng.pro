@@ -7,6 +7,14 @@
 
 # Add INSTALLS directives for qscintilla
 
+#system(\
+#        cd ./cscope && \
+#        ./configure && \
+#        make -j4 && \
+#        mv ./src/cscope ./cscope && \
+#        make distclean \
+#        )
+
 
 include(./editor/qscintilla.pri)
 
@@ -34,11 +42,11 @@ TEMPLATE = app
 SOURCES +=  \
             ./core/main.cpp \
             ./core/mainwindow.cpp \
-            ./core/findreplace.cpp
+            ./core/findreplace.cpp \
 
 HEADERS  += \
             ./include/mainwindow.h \
-            ./include/findreplace.h
+            ./include/findreplace.h \
 
 INCLUDEPATH += \
             ./include \

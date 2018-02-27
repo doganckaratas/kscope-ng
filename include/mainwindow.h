@@ -51,6 +51,7 @@ private slots:
     void closeFile();
     void closeFile(const int& index);
     void getFiles(QString files);
+    void demoQuery(QString path, int mode, QString keyword);
     void setupLexer(enum LexerType l);
     void editorTabChanged(int index);
     void editorSelection();

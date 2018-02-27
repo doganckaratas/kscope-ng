@@ -29,6 +29,10 @@
 //#include "events.h"
 
 #include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <ctype.h>
 
 /** === Roadmap ===
  *  @todo Implement Event.cpp, Action.cpp, View.cpp
@@ -206,6 +210,9 @@ void MainWindow::openFile()
 
             // get recursive file list
             MainWindow::getFiles(finfo.absolutePath());
+
+            // run demo cscope instance
+            MainWindow::demoQuery(finfo.absolutePath(),5,"ucast");
 
             // lexer | fix this !
 
@@ -388,6 +395,44 @@ void MainWindow::getFiles(QString files)
     }
     ui->treeFiles->addTopLevelItems(items);
     delete itm;
+}
+
+void MainWindow::demoQuery(QString path, int mode, QString keyword)
+{
+    FILE *fd;
+    char *tmp;
+    char out[1023];
+    int i,x;
+    QString cscopebin = "/Users/dogan/Desktop/kscope-ng-2/cscope/cscope";
+    system((cscopebin.toLatin1() + " -b -k -R -s " + path.toLatin1()).data());
+    fd = popen((cscopebin.toLatin1() + " -d -L" + QString::number(mode).toLatin1() + " " + keyword.toLatin1()).data(), "r");
+    while (fgets(out, sizeof(out)-1, fd) != NULL) {
+            //printf("%s", out);
+            for(i=x=0; out[i]; ++i)
+                if(!isspace(out[i]) || (i>0 && !isspace(out[i-1])))
+                    out[x++] = out[i];
+            out[x] = '\0';
+            tmp = strtok(out, " ");
+            if(tmp != NULL) {
+                printf("File\t: %s\n", tmp);
+            }
+            tmp = strtok(NULL, " ");
+            if(tmp != NULL) {
+                printf("Func\t: %s\n", tmp);
+            }
+            tmp = strtok(NULL, " ");
+            if (tmp != NULL) {
+                printf("Line\t: %s\n", tmp);
+            }
+            tmp = strtok(NULL, "");
+            if (tmp != NULL) {
+                printf("Code\t: %s\n", tmp);
+            }
+            printf("\n");
+        }
+
+        system("rm -rf cscope.out");
+    pclose(fd);
 }
 
 void MainWindow::setupLexer(enum LexerType l)
