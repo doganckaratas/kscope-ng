@@ -14,8 +14,8 @@ Qt based IDE/Editor inspired from KDE KScope, entirely written from scratch
 - Add Dynamic Line Numbering
 - Add Custom highlighters
 - Run QScintilla component and its' instances in another thread
-- Add Find&Replace
-- Add CScope wrapper
+- ~Add Find&Replace~
+- ~Add CScope wrapper~
 - Refactor marked methods
 - Delete View XML and implement them with C++ (same with #4)
 - Fix Windows release
