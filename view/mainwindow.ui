@@ -291,7 +291,7 @@
      <item>
       <widget class="QTreeWidget" name="treeResults">
        <attribute name="headerDefaultSectionSize">
-        <number>100</number>
+        <number>186</number>
        </attribute>
        <column>
         <property name="text">

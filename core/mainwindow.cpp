@@ -211,8 +211,8 @@ void MainWindow::openFile()
             // get recursive file list
             MainWindow::getFiles(finfo.absolutePath());
 
-            // run demo cscope instance
-            MainWindow::demoQuery(finfo.absolutePath(),5,"ucast");
+            // setup cscope frontend
+            MainWindow::setupCScope(finfo.absolutePath());
 
             // lexer | fix this !
 
@@ -324,7 +324,7 @@ void MainWindow::closeFile(const int& index)
                 ui->tabWidget->widget(index)->findChild<QsciScintilla *>("editor")->close();
                 ui->tabWidget->widget(index)->findChild<QsciScintilla *>("editor")->deleteLater();
                 ui->tabWidget->widget(index)->deleteLater();
-
+                destroyCScope();
                 /*
                  * MEMORY LEAK, delete tab content  & document too. [DONE]
                  */
@@ -345,7 +345,7 @@ void MainWindow::closeFile(const int& index)
         ui->tabWidget->widget(index)->findChild<QsciScintilla *>("editor")->close();
         ui->tabWidget->widget(index)->findChild<QsciScintilla *>("editor")->deleteLater();
         ui->tabWidget->widget(index)->deleteLater();
-
+        destroyCScope();
         /*
          * MEMORY LEAK, delete tab content  & document too. [DONE]
          */
@@ -397,7 +397,14 @@ void MainWindow::getFiles(QString files)
     delete itm;
 }
 
-void MainWindow::demoQuery(QString path, int mode, QString keyword)
+void MainWindow::setupCScope(QString path)
+{
+    cscope_bin = "cscope";
+    //cscope_bin = "/Users/dogan/Desktop/kscope-ng-2/cscope/cscope";
+    system((cscope_bin.toLatin1() + " -b -k -R -s " + path.toLatin1()).data());
+}
+
+void MainWindow::queryCScope(int mode, QString keyword)
 {
     FILE *fd;
     char *tmp;
@@ -406,10 +413,7 @@ void MainWindow::demoQuery(QString path, int mode, QString keyword)
     QList<QTreeWidgetItem *> items;
     QTreeWidgetItem *itm;
     ui->treeResults->clear();
-    //QString cscopebin = "/Users/dogan/Desktop/kscope-ng-2/cscope/cscope";
-    QString cscopebin = "cscope";
-    system((cscopebin.toLatin1() + " -b -k -R -s " + path.toLatin1()).data());
-    fd = popen((cscopebin.toLatin1() + " -d -L" + QString::number(mode).toLatin1() + " " + keyword.toLatin1()).data(), "r");
+    fd = popen((cscope_bin.toLatin1() + " -d -L" + QString::number(mode).toLatin1() + " " + keyword.toLatin1()).data(), "r");
     while (fgets(out, sizeof(out)-1, fd) != NULL) {
             //printf("%s", out);
             itm = new QTreeWidgetItem(0);
@@ -432,7 +436,7 @@ void MainWindow::demoQuery(QString path, int mode, QString keyword)
                 printf("Line\t: %s\n", tmp);
                 itm->setText(2,QString(tmp));
             }
-            tmp = strtok(NULL, "");
+            tmp = strtok(NULL, "\n");
             if (tmp != NULL) {
                 printf("Code\t: %s\n", tmp);
                 itm->setText(3,QString(tmp));
@@ -441,9 +445,13 @@ void MainWindow::demoQuery(QString path, int mode, QString keyword)
             printf("\n");
         }
     ui->treeResults->addTopLevelItems(items);
-    system("rm -rf cscope.out");
     pclose(fd);
     delete itm;
+}
+
+void MainWindow::destroyCScope()
+{
+    system("rm -rf cscope.out");
 }
 
 void MainWindow::setupLexer(enum LexerType l)
@@ -514,6 +522,10 @@ void MainWindow::editorReplaceDialog()
 void MainWindow::editorFindResponse(QString string, bool re, bool cs, bool wo, bool wr)
 {
     ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->findFirst(string, re, cs, wo, wr);
+
+    // run demo cscope instance
+    MainWindow::queryCScope(5, string);
+
 }
 
 void MainWindow::editorReplaceResponse(QString from, QString to, bool re, bool cs, bool wo, bool wr, bool all)

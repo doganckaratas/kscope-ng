@@ -35,6 +35,7 @@ private:
     int getFirstTabIdFromName(QTabWidget *qtw, std::string name);
     void setupSignals();
     void setIconStates(bool state);
+    QString cscope_bin = "cscope";
     enum LexerType{
         LEXER_DEFAULT = 0,
         LEXER_CPP,
@@ -51,7 +52,9 @@ private slots:
     void closeFile();
     void closeFile(const int& index);
     void getFiles(QString files);
-    void demoQuery(QString path, int mode, QString keyword);
+    void setupCScope(QString path);
+    void queryCScope(int mode, QString keyword);
+    void destroyCScope();
     void setupLexer(enum LexerType l);
     void editorTabChanged(int index);
     void editorSelection();
