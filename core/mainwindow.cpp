@@ -403,11 +403,16 @@ void MainWindow::demoQuery(QString path, int mode, QString keyword)
     char *tmp;
     char out[1023];
     int i,x;
-    QString cscopebin = "/Users/dogan/Desktop/kscope-ng-2/cscope/cscope";
+    QList<QTreeWidgetItem *> items;
+    QTreeWidgetItem *itm;
+    ui->treeResults->clear();
+    //QString cscopebin = "/Users/dogan/Desktop/kscope-ng-2/cscope/cscope";
+    QString cscopebin = "cscope";
     system((cscopebin.toLatin1() + " -b -k -R -s " + path.toLatin1()).data());
     fd = popen((cscopebin.toLatin1() + " -d -L" + QString::number(mode).toLatin1() + " " + keyword.toLatin1()).data(), "r");
     while (fgets(out, sizeof(out)-1, fd) != NULL) {
             //printf("%s", out);
+            itm = new QTreeWidgetItem(0);
             for(i=x=0; out[i]; ++i)
                 if(!isspace(out[i]) || (i>0 && !isspace(out[i-1])))
                     out[x++] = out[i];
@@ -415,24 +420,30 @@ void MainWindow::demoQuery(QString path, int mode, QString keyword)
             tmp = strtok(out, " ");
             if(tmp != NULL) {
                 printf("File\t: %s\n", tmp);
+                itm->setText(0,QString(tmp));
             }
             tmp = strtok(NULL, " ");
             if(tmp != NULL) {
                 printf("Func\t: %s\n", tmp);
+                itm->setText(1,QString(tmp));
             }
             tmp = strtok(NULL, " ");
             if (tmp != NULL) {
                 printf("Line\t: %s\n", tmp);
+                itm->setText(2,QString(tmp));
             }
             tmp = strtok(NULL, "");
             if (tmp != NULL) {
                 printf("Code\t: %s\n", tmp);
+                itm->setText(3,QString(tmp));
             }
+            items.append(itm);
             printf("\n");
         }
-
-        system("rm -rf cscope.out");
+    ui->treeResults->addTopLevelItems(items);
+    system("rm -rf cscope.out");
     pclose(fd);
+    delete itm;
 }
 
 void MainWindow::setupLexer(enum LexerType l)

@@ -289,7 +289,31 @@
    <widget class="QWidget" name="dockCscopeContents">
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
-      <widget class="QTableWidget" name="tableResults"/>
+      <widget class="QTreeWidget" name="treeResults">
+       <attribute name="headerDefaultSectionSize">
+        <number>100</number>
+       </attribute>
+       <column>
+        <property name="text">
+         <string>File</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Function</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Line</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Contents</string>
+        </property>
+       </column>
+      </widget>
      </item>
     </layout>
    </widget>
