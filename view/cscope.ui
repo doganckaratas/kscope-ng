@@ -170,6 +170,14 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>symbolString</tabstop>
+  <tabstop>typeComboBox</tabstop>
+  <tabstop>subStringCheckBox</tabstop>
+  <tabstop>caseInsensitiveCheckBox</tabstop>
+  <tabstop>executeButton</tabstop>
+  <tabstop>cancelButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

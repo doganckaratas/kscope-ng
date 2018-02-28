@@ -43,7 +43,7 @@
  *  @todo Add Custom highlighters
  *  @todo Run QScintilla component and its' instances in another thread
  *  [OK] @todo Add Find&Replace
- *  @todo Add CScope wrapper
+ *  [OK] @todo Add CScope wrapper
  *  @todo Refactor marked methods
  *  @todo Delete View XML and implement them with C++ (same with #4)
  *  @todo Fix Windows release
@@ -165,7 +165,6 @@ void MainWindow::newFile()
     qsc->setMarginType(0, QsciScintilla::NumberMargin);
     qsc->setMarginWidth(0, "0000");
     qsc->setMarginsForegroundColor(QColor("#ff888888"));
-    qsc->setFocus();
     qtw->setTabText(qtw->indexOf(qtw), "New File");
     qtw->setDocumentMode(true);
     qtw->setObjectName("tab");
@@ -183,6 +182,7 @@ void MainWindow::newFile()
     ui->actionSave->setEnabled(false);
     ui->tabWidget->setTabToolTip(ui->tabWidget->currentIndex(),"New File");
     ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->SendScintilla(QsciScintillaBase::SCI_SETSAVEPOINT,0);
+    qsc->setFocus();
     setIconStates(true);
     D("New File");
 }
@@ -218,10 +218,10 @@ void MainWindow::openFile()
              * -> Classic MacOS (\r)
              */
 
-            // get recursive file list
+            // get recursive file list [Another Thread]
             MainWindow::getFiles(finfo.absolutePath());
 
-            // setup cscope frontend
+            // setup cscope frontend [Another Thread]
             MainWindow::cscopeSetup(finfo.absolutePath());
 
             // lexer | fix this !
@@ -431,26 +431,26 @@ void MainWindow::cscopeQuery(int mode, QString keyword)
             out[x] = '\0';
             tmp = strtok(out, " ");
             if(tmp != NULL) {
-                printf("File\t: %s\n", tmp);
+                //printf("File\t: %s\n", tmp);
                 itm->setText(0,QString(tmp));
             }
             tmp = strtok(NULL, " ");
             if(tmp != NULL) {
-                printf("Func\t: %s\n", tmp);
+                //printf("Func\t: %s\n", tmp);
                 itm->setText(1,QString(tmp));
             }
             tmp = strtok(NULL, " ");
             if (tmp != NULL) {
-                printf("Line\t: %s\n", tmp);
+                //printf("Line\t: %s\n", tmp);
                 itm->setText(2,QString(tmp));
             }
             tmp = strtok(NULL, "\n");
             if (tmp != NULL) {
-                printf("Code\t: %s\n", tmp);
+                //printf("Code\t: %s\n", tmp);
                 itm->setText(3,QString(tmp));
             }
             items.append(itm);
-            printf("\n");
+            //printf("\n");
         }
     ui->treeResults->addTopLevelItems(items);
     pclose(fd);

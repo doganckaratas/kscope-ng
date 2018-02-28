@@ -275,6 +275,25 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>findEditText</tabstop>
+  <tabstop>findRegularExpressionCheckBox</tabstop>
+  <tabstop>findCaseSensitiveCheckBox</tabstop>
+  <tabstop>findExactWordCheckBox</tabstop>
+  <tabstop>findWrapSearchCheckBox</tabstop>
+  <tabstop>findButton</tabstop>
+  <tabstop>findCancelButton</tabstop>
+  <tabstop>findReplaceTabWidget</tabstop>
+  <tabstop>replaceFromEditText</tabstop>
+  <tabstop>replaceToEditText</tabstop>
+  <tabstop>replaceRegularExpressionCheckBox</tabstop>
+  <tabstop>replaceCaseSensitiveCheckBox</tabstop>
+  <tabstop>replaceExactWordCheckBox</tabstop>
+  <tabstop>replaceWrapSearchCheckBox</tabstop>
+  <tabstop>replaceButton</tabstop>
+  <tabstop>replaceAllButton</tabstop>
+  <tabstop>replaceCancelButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
