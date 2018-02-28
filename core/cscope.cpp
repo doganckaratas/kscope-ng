@@ -60,6 +60,7 @@ void CScope::showIncludingFiles()
 void CScope::searchClicked()
 {
     emit cscopeRequest(ui->typeComboBox->currentIndex(), ui->symbolString->text());
+    close();
 }
 
 CScope::~CScope()
