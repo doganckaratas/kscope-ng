@@ -43,10 +43,12 @@ SOURCES +=  \
             ./core/main.cpp \
             ./core/mainwindow.cpp \
             ./core/findreplace.cpp \
+            ./core/cscope.cpp
 
 HEADERS  += \
             ./include/mainwindow.h \
             ./include/findreplace.h \
+            ./include/cscope.h
 
 INCLUDEPATH += \
             ./include \
@@ -58,6 +60,7 @@ INCLUDEPATH += \
 DEFINES += SCINTILLA_QT SCI_LEXER
 
 FORMS    += ./view/mainwindow.ui \
-            ./view/findreplace.ui
+            ./view/findreplace.ui \
+            ./view/cscope.ui
 
 RESOURCES += ./res/resources.qrc

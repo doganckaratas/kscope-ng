@@ -11,6 +11,7 @@
 
 #include <QMainWindow>
 #include "findreplace.h"
+#include "cscope.h"
 
 #define RELEASE_DATE    "06/02/2018\n"
 #define VERSION         "v0.7_PRE_RELEASE"
@@ -32,6 +33,7 @@ public:
 private:
     Ui::MainWindow *ui;
     FindReplace *fr;
+    CScope *cs;
     int getFirstTabIdFromName(QTabWidget *qtw, std::string name);
     void setupSignals();
     void setIconStates(bool state);
@@ -51,21 +53,37 @@ private slots:
     void saveFileAs();
     void closeFile();
     void closeFile(const int& index);
+
     void getFiles(QString files);
-    void setupCScope(QString path);
-    void queryCScope(int mode, QString keyword);
-    void destroyCScope();
+
+
     void setupLexer(enum LexerType l);
+
     void editorTabChanged(int index);
     void editorSelection();
     void editorUpdate();
     void editorModified(bool status);
     void editorUndo();
     void editorRedo();
+
+    void cscopeSetup(QString path);
+    void cscopeQuery(int mode, QString keyword);
+    void cscopeDestroy();
+    void cscopeReferencesDialog();
+    void cscopeDefinitionsDialog();
+    void cscopeCalledFunctionsDialog();
+    void cscopeCallingFunctionsDialog();
+    void cscopeFindTextDialog();
+    void cscopeFindEGrepDialog();
+    void cscopeFindFileDialog();
+    void cscopeIncludingFilesDialog();
+    void cscopeResponse(int mode, QString keyword);
+
     void editorFindDialog();
     void editorReplaceDialog();
     void editorFindResponse(QString string, bool re, bool cs, bool wo, bool wr);
     void editorReplaceResponse(QString from, QString to, bool re, bool cs, bool wo, bool wr, bool all);
+
     void editorCut();
     void editorCopy();
     void editorPaste();

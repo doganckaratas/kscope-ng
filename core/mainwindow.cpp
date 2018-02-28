@@ -55,6 +55,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 {
     ui->setupUi(this);
     fr = new FindReplace(this);
+    cs = new CScope(this);
     MainWindow::setWindowTitle(QString::fromStdString("KScope-NG ") +
                                QString::fromStdString(VERSION));
     /*
@@ -82,10 +83,19 @@ void MainWindow::setupSignals()
     connect(ui->actionCopy, SIGNAL(triggered()), this, SLOT(editorCopy()));
     connect(ui->actionFind, SIGNAL(triggered()), this, SLOT(editorFindDialog()));
     connect(ui->actionReplace, SIGNAL(triggered()), this, SLOT(editorReplaceDialog()));
+    connect(ui->actionReferences, SIGNAL(triggered()), this, SLOT(cscopeReferencesDialog()));
+    connect(ui->actionDefinition, SIGNAL(triggered()), this, SLOT(cscopeDefinitionsDialog()));
+    connect(ui->actionCalled_Functions, SIGNAL(triggered()), this, SLOT(cscopeCalledFunctionsDialog()));
+    connect(ui->actionCalling_Functions, SIGNAL(triggered()), this, SLOT(cscopeCallingFunctionsDialog()));
+    connect(ui->actionFind_Text, SIGNAL(triggered()), this, SLOT(cscopeFindTextDialog()));
+    connect(ui->actionFind_EGrep_Pattern, SIGNAL(triggered()), this, SLOT(cscopeFindEGrepDialog()));
+    connect(ui->actionFind_File, SIGNAL(triggered()), this, SLOT(cscopeFindFileDialog()));
+    connect(ui->actionIncluding_Files, SIGNAL(triggered()), this, SLOT(cscopeIncludingFilesDialog()));
     connect(ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(editorTabChanged(int)));
     connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeFile(int)));
     connect(fr, SIGNAL(findRequest(QString, bool, bool, bool, bool)), this, SLOT(editorFindResponse(QString, bool, bool, bool, bool)));
     connect(fr, SIGNAL(replaceRequest(QString, QString, bool, bool, bool, bool, bool)), this, SLOT(editorReplaceResponse(QString,QString,bool, bool, bool, bool, bool)));
+    connect(cs, SIGNAL(cscopeRequest(int,QString)), this, SLOT(cscopeResponse(int, QString)));
 
     /*
      * TODO: set up all action handlers
@@ -212,7 +222,7 @@ void MainWindow::openFile()
             MainWindow::getFiles(finfo.absolutePath());
 
             // setup cscope frontend
-            MainWindow::setupCScope(finfo.absolutePath());
+            MainWindow::cscopeSetup(finfo.absolutePath());
 
             // lexer | fix this !
 
@@ -324,7 +334,6 @@ void MainWindow::closeFile(const int& index)
                 ui->tabWidget->widget(index)->findChild<QsciScintilla *>("editor")->close();
                 ui->tabWidget->widget(index)->findChild<QsciScintilla *>("editor")->deleteLater();
                 ui->tabWidget->widget(index)->deleteLater();
-                destroyCScope();
                 /*
                  * MEMORY LEAK, delete tab content  & document too. [DONE]
                  */
@@ -345,7 +354,6 @@ void MainWindow::closeFile(const int& index)
         ui->tabWidget->widget(index)->findChild<QsciScintilla *>("editor")->close();
         ui->tabWidget->widget(index)->findChild<QsciScintilla *>("editor")->deleteLater();
         ui->tabWidget->widget(index)->deleteLater();
-        destroyCScope();
         /*
          * MEMORY LEAK, delete tab content  & document too. [DONE]
          */
@@ -397,14 +405,14 @@ void MainWindow::getFiles(QString files)
     delete itm;
 }
 
-void MainWindow::setupCScope(QString path)
+void MainWindow::cscopeSetup(QString path)
 {
     cscope_bin = "cscope";
     //cscope_bin = "/Users/dogan/Desktop/kscope-ng-2/cscope/cscope";
     system((cscope_bin.toLatin1() + " -b -k -R -s " + path.toLatin1()).data());
 }
 
-void MainWindow::queryCScope(int mode, QString keyword)
+void MainWindow::cscopeQuery(int mode, QString keyword)
 {
     FILE *fd;
     char *tmp;
@@ -449,7 +457,7 @@ void MainWindow::queryCScope(int mode, QString keyword)
     delete itm;
 }
 
-void MainWindow::destroyCScope()
+void MainWindow::cscopeDestroy()
 {
     system("rm -rf cscope.out");
 }
@@ -507,6 +515,59 @@ void MainWindow::setupLexer(enum LexerType l)
     }
 }
 
+void MainWindow::cscopeReferencesDialog()
+{
+    cs->showReferences();
+    D("CScope Find Text Dialog");
+}
+
+void MainWindow::cscopeDefinitionsDialog()
+{
+    cs->showDefinitions();
+    D("CScope Find Text Dialog");
+}
+
+void MainWindow::cscopeCalledFunctionsDialog()
+{
+    cs->showCalledFunctions();
+    D("CScope Find Text Dialog");
+}
+
+void MainWindow::cscopeCallingFunctionsDialog()
+{
+    cs->showCallingFunctions();
+    D("CScope Find Text Dialog");
+}
+
+void MainWindow::cscopeFindTextDialog()
+{
+    cs->showFindText();
+    D("CScope Find Text Dialog");
+}
+
+void MainWindow::cscopeFindEGrepDialog()
+{
+    cs->showFindEGrep();
+    D("CScope Find Text Dialog");
+}
+
+void MainWindow::cscopeFindFileDialog()
+{
+    cs->showFindFile();
+    D("CScope Find Text Dialog");
+}
+
+void MainWindow::cscopeIncludingFilesDialog()
+{
+    cs->showIncludingFiles();
+    D("CScope Find Text Dialog");
+}
+
+void MainWindow::cscopeResponse(int mode, QString keyword)
+{
+    cscopeQuery(mode, keyword);
+}
+
 void MainWindow::editorFindDialog()
 {
     fr->showFind();
@@ -522,10 +583,6 @@ void MainWindow::editorReplaceDialog()
 void MainWindow::editorFindResponse(QString string, bool re, bool cs, bool wo, bool wr)
 {
     ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->findFirst(string, re, cs, wo, wr);
-
-    // run demo cscope instance
-    MainWindow::queryCScope(5, string);
-
 }
 
 void MainWindow::editorReplaceResponse(QString from, QString to, bool re, bool cs, bool wo, bool wr, bool all)
@@ -675,6 +732,7 @@ int MainWindow::getFirstTabIdFromName(QTabWidget *qtw, std::string name)
 
 MainWindow::~MainWindow()
 {
+    cscopeDestroy();
     delete fr;
     delete ui;
 }

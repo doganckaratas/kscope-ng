@@ -15,7 +15,8 @@
  */
 
 
-FindReplace::FindReplace(QWidget *parent) : QDialog(parent), ui(new Ui::FindReplace) {
+FindReplace::FindReplace(QWidget *parent) : QDialog(parent), ui(new Ui::FindReplace)
+{
     ui->setupUi(this);
     connect(ui->findButton, SIGNAL(clicked(bool)), this, SLOT(findClicked()));
     connect(ui->replaceButton, SIGNAL(clicked(bool)), this, SLOT(replaceClicked()));
