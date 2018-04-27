@@ -68,6 +68,7 @@ private slots:
 
     void cscopeSetup(QString path);
     void cscopeQuery(int mode, QString keyword);
+    void cscopeClear();
     void cscopeDestroy();
     void cscopeReferencesDialog();
     void cscopeDefinitionsDialog();

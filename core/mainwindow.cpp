@@ -222,7 +222,7 @@ void MainWindow::openFile()
             MainWindow::getFiles(finfo.absolutePath());
 
             // setup cscope frontend [Another Thread]
-            MainWindow::cscopeSetup(finfo.absolutePath());
+            MainWindow::cscopeSetup("./cscope.out");
 
             // lexer | fix this !
 
@@ -366,6 +366,7 @@ void MainWindow::closeFile(const int& index)
 void MainWindow::closeFile()
 {
     D("Close Current File");
+    MainWindow::cscopeClear();
     MainWindow::closeFile(ui->tabWidget->currentIndex());
 }
 
@@ -455,6 +456,12 @@ void MainWindow::cscopeQuery(int mode, QString keyword)
     ui->treeResults->addTopLevelItems(items);
     pclose(fd);
     delete itm;
+}
+
+void MainWindow::cscopeClear()
+{
+    ui->treeResults->clear();
+    ui->treeFiles->clear();
 }
 
 void MainWindow::cscopeDestroy()
