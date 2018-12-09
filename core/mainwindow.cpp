@@ -422,7 +422,11 @@ void MainWindow::cscopeQuery(int mode, QString keyword)
     QList<QTreeWidgetItem *> items;
     QTreeWidgetItem *itm;
     ui->treeResults->clear();
+#ifdef _WIN32
+    fd = _popen((cscope_bin.toLatin1() + " -d -L" + QString::number(mode).toLatin1() + " " + keyword.toLatin1()).data(), "r");
+#else
     fd = popen((cscope_bin.toLatin1() + " -d -L" + QString::number(mode).toLatin1() + " " + keyword.toLatin1()).data(), "r");
+#endif /* _WIN32 */
     while (fgets(out, sizeof(out)-1, fd) != NULL) {
             //printf("%s", out);
             itm = new QTreeWidgetItem(0);
@@ -454,7 +458,12 @@ void MainWindow::cscopeQuery(int mode, QString keyword)
             //printf("\n");
         }
     ui->treeResults->addTopLevelItems(items);
+
+#ifdef _WIN32
+    _pclose(fd);
+#else
     pclose(fd);
+#endif /* _WIN32 */
     delete itm;
 }
 
