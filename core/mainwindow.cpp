@@ -378,21 +378,22 @@ void MainWindow::getFiles(QString files)
     QTreeWidgetItem *itm;
     QDirIterator dir(files,QDirIterator::Subdirectories);
     while (dir.hasNext()) {
-        if (QFileInfo(dir.filePath()).isFile()) {
-            if (QFileInfo(dir.filePath()).suffix() == "c") {
+        QFile f(dir.next());
+        if (QFileInfo(f).isFile()) {
+            if (QFileInfo(f).suffix() == "c") {
                 itm = new QTreeWidgetItem(0);
                 itm->setText(0, "c");
-                itm->setText(1, QFileInfo(dir.filePath()).fileName());
+                itm->setText(1, QFileInfo(f).fileName());
                 items.append(itm);
-            } else if (QFileInfo(dir.filePath()).suffix() == "h") {
+            } else if (QFileInfo(f).suffix() == "h") {
                 itm = new QTreeWidgetItem(0);
                 itm->setText(0, "h");
-                itm->setText(1, QFileInfo(dir.filePath()).fileName());
+                itm->setText(1, QFileInfo(f).fileName());
                 items.append(itm);
-            } else if (QFileInfo(dir.filePath()).suffix() == "cpp") {
+            } else if (QFileInfo(f).suffix() == "cpp") {
                 itm = new QTreeWidgetItem(0);
                 itm->setText(0, "cpp");
-                itm->setText(1, QFileInfo(dir.filePath()).fileName());
+                itm->setText(1, QFileInfo(f).fileName());
                 items.append(itm);
             } else {
                 ;
@@ -400,10 +401,9 @@ void MainWindow::getFiles(QString files)
         } else {
             ;
         }
-        dir.next();
     }
     ui->treeFiles->addTopLevelItems(items);
-    delete itm;
+    //delete itm;
 }
 
 void MainWindow::cscopeSetup(QString path)
