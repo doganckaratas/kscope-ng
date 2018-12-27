@@ -6,7 +6,7 @@
  * @file main.cpp
  */
 
-#include "mainwindow.h"
+#include "kscope.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])

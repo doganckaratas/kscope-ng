@@ -39,16 +39,16 @@ TARGET = kscope-ng
 
 TEMPLATE = app
 
-SOURCES +=  \
-            ./core/main.cpp \
-            ./core/mainwindow.cpp \
+SOURCES +=  ./core/main.cpp \
+            ./core/kscope.cpp \
             ./core/findreplace.cpp \
-            ./core/cscope.cpp
+            ./core/cscope.cpp \
+            ./view/view.cpp
 
-HEADERS  += \
-            ./include/mainwindow.h \
+HEADERS  += ./include/kscope.h \
             ./include/findreplace.h \
-            ./include/cscope.h
+            ./include/cscope.h \
+            ./include/view.h
 
 INCLUDEPATH += \
             ./include \

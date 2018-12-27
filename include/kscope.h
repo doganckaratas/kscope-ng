@@ -3,7 +3,7 @@
  * A Qt based C/C++ IDE Project
  * @author Dogan C. Karatas
  * @date 2018
- * @file mainwindow.h
+ * @file kscope.h
  */
 
 #ifndef MAINWINDOW_H

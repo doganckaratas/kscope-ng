@@ -3,7 +3,7 @@
  * A Qt based C/C++ IDE Project
  * @author Dogan C. Karatas
  * @date 2018
- * @file mainwindow.cpp
+ * @file kscope.cpp
  */
 
 
@@ -17,7 +17,7 @@
 #include <QDirIterator>
 #include <QStandardItem>
 
-#include "mainwindow.h"
+#include "kscope.h"
 #include "ui_mainwindow.h"
 #include "Qsci/qsciscintilla.h"
 #include "Qsci/qsciscintillabase.h"
