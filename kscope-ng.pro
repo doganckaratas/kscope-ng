@@ -43,15 +43,18 @@ SOURCES +=  ./core/main.cpp \
             ./core/kscope.cpp \
             ./core/findreplace.cpp \
             ./core/cscope.cpp \
-            ./view/view.cpp
+#            ./view/view.cpp \
+            ./view/findreplace2.cpp
 
 HEADERS  += ./include/kscope.h \
             ./include/findreplace.h \
             ./include/cscope.h \
-            ./include/view.h
+#            ./include/view.h \
+            ./view/findreplace2.h
 
 INCLUDEPATH += \
             ./include \
+            ./view \
             ./editor/qscintilla \
             ./editor/include \
             ./editor/lexlib \

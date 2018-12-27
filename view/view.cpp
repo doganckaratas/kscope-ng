@@ -6,5 +6,24 @@
  * @file view.cpp
  */
 
+
+/* kscope.cpp ile degistirilecek */
+
 #include "view.h"
+#include <QMainWindow>
 #include <QApplication>
+
+View::View(QWidget *parent)// : QMainWindow(parent)
+{
+    fr2 = new FindReplace2();
+}
+
+void View::showFindReplace()
+{
+    fr2->show();
+}
+
+View::~View()
+{
+    delete fr2;
+}

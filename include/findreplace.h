@@ -21,7 +21,7 @@ class FindReplace : public QDialog
     Q_OBJECT
 
 public:
-    explicit FindReplace(QWidget *parent = 0);
+    explicit FindReplace(QWidget *parent = nullptr);
     void showFind();
     void showReplace();
     ~FindReplace();

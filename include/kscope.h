@@ -12,28 +12,35 @@
 #include <QMainWindow>
 #include "findreplace.h"
 #include "cscope.h"
+#include "findreplace2.h"
 
-#define RELEASE_DATE    "28/02/2018\n"
-#define VERSION         "v0.8_PRE_RELEASE"
+#define RELEASE_DATE    "27/12/2018\n"
+#define VERSION         "v0.9_PRE_RELEASE"
 #define VER_STR         VERSION"\n"
 #define D(arg)          statusBar()->showMessage("DEBUG: " + QString::fromStdString(arg),1000)
+
+#ifdef _WIN32
+#define popen _popen
+#define pclose _pclose
+#endif /* _WIN32 */
 
 namespace Ui {
     class MainWindow;
 }
 
-class MainWindow : public QMainWindow
+class KScope : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    explicit KScope(QWidget *parent = nullptr);
+    ~KScope();
 
 private:
     Ui::MainWindow *ui;
     FindReplace *fr;
     CScope *cs;
+    FindReplace2 *fr2;
     int getFirstTabIdFromName(QTabWidget *qtw, std::string name);
     void setupSignals();
     void setIconStates(bool state);

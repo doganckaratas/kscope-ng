@@ -18,6 +18,7 @@
 #include <QStandardItem>
 
 #include "kscope.h"
+#include "view.h"
 #include "ui_mainwindow.h"
 #include "Qsci/qsciscintilla.h"
 #include "Qsci/qsciscintillabase.h"
@@ -51,12 +52,14 @@
  */
 
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
+KScope::KScope(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     fr = new FindReplace(this);
     cs = new CScope(this);
-    MainWindow::setWindowTitle(QString::fromStdString("KScope-NG ") +
+    fr2 = new FindReplace2(this);
+
+    KScope::setWindowTitle(QString::fromStdString("KScope-NG ") +
                                QString::fromStdString(VERSION));
     /*
      *  remove above line from production release
@@ -65,7 +68,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     setIconStates(false);
 }
 
-void MainWindow::setupSignals()
+void KScope::setupSignals()
 {
     connect(ui->actionNew, SIGNAL(triggered()), this, SLOT(newFile()));
     connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(openFile()));
@@ -102,7 +105,7 @@ void MainWindow::setupSignals()
      */
 }
 
-void MainWindow::setIconStates(bool state)
+void KScope::setIconStates(bool state)
 {
     /*
      * TODO: not all actions needed to be enabled. arrange it
@@ -152,7 +155,7 @@ void MainWindow::setIconStates(bool state)
     }
 }
 
-void MainWindow::newFile()
+void KScope::newFile()
 {
     /* TODO: Refactor this method */
 
@@ -187,7 +190,7 @@ void MainWindow::newFile()
     D("New File");
 }
 
-void MainWindow::openFile()
+void KScope::openFile()
 {
     /* TODO: Refactor this method */
     QString fname = QFileDialog::getOpenFileName(this,
@@ -200,7 +203,7 @@ void MainWindow::openFile()
     if (fname != "") {
         QFile f(fname);
         if (f.open((QIODevice::ReadOnly | QIODevice::Text | QIODevice::ReadWrite))) {
-            MainWindow::newFile();
+            KScope::newFile();
             QTextStream stream(&f);
             QFileInfo finfo(f);
             //qsc->setLexer(new QsciLexerCPP(this));
@@ -219,10 +222,10 @@ void MainWindow::openFile()
              */
 
             // get recursive file list [Another Thread]
-            MainWindow::getFiles(finfo.absolutePath());
+            KScope::getFiles(finfo.absolutePath());
 
             // setup cscope frontend [Another Thread]
-            MainWindow::cscopeSetup("./cscope.out");
+            KScope::cscopeSetup("./cscope.out");
 
             // lexer | fix this !
 
@@ -248,7 +251,7 @@ void MainWindow::openFile()
     D("Open File");
 }
 
-void MainWindow::saveFile()
+void KScope::saveFile()
 {
     /* TODO: Merge with Save As */
 
@@ -274,7 +277,7 @@ void MainWindow::saveFile()
 
 }
 
-void MainWindow::saveFileAs()
+void KScope::saveFileAs()
 {
     /* TODO: Refactor this method */
 
@@ -305,7 +308,7 @@ void MainWindow::saveFileAs()
     }
 }
 
-void MainWindow::closeFile(const int& index)
+void KScope::closeFile(const int& index)
 {
     // fix this and the other close routine
     // add close app event, cycle all modified inst's.
@@ -324,7 +327,7 @@ void MainWindow::closeFile(const int& index)
             int ret = qm.exec();
             if (ret == QMessageBox::Save) {
                 D("Save Clicked");
-                MainWindow::saveFile();
+                KScope::saveFile();
             }
             if (ret == QMessageBox::Discard) {
                 D("Discard Clicked");
@@ -363,14 +366,14 @@ void MainWindow::closeFile(const int& index)
     }
 }
 
-void MainWindow::closeFile()
+void KScope::closeFile()
 {
     D("Close Current File");
-    MainWindow::cscopeClear();
-    MainWindow::closeFile(ui->tabWidget->currentIndex());
+    KScope::cscopeClear();
+    KScope::closeFile(ui->tabWidget->currentIndex());
 }
 
-void MainWindow::getFiles(QString files)
+void KScope::getFiles(QString files)
 {
     /* TODO: It missing first file, fix it. */
     ui->treeFiles->clear();
@@ -406,28 +409,25 @@ void MainWindow::getFiles(QString files)
     //delete itm;
 }
 
-void MainWindow::cscopeSetup(QString path)
+void KScope::cscopeSetup(QString path)
 {
     cscope_bin = "cscope";
     //cscope_bin = "/Users/dogan/Desktop/kscope-ng-2/cscope/cscope";
     system((cscope_bin.toLatin1() + " -b -k -R -s " + path.toLatin1()).data());
 }
 
-void MainWindow::cscopeQuery(int mode, QString keyword)
+void KScope::cscopeQuery(int mode, QString keyword)
 {
     FILE *fd;
     char *tmp;
     char out[1023];
     int i,x;
     QList<QTreeWidgetItem *> items;
-    QTreeWidgetItem *itm;
+    QTreeWidgetItem *itm = nullptr;
     ui->treeResults->clear();
-#ifdef _WIN32
-    fd = _popen((cscope_bin.toLatin1() + " -d -L" + QString::number(mode).toLatin1() + " " + keyword.toLatin1()).data(), "r");
-#else
     fd = popen((cscope_bin.toLatin1() + " -d -L" + QString::number(mode).toLatin1() + " " + keyword.toLatin1()).data(), "r");
-#endif /* _WIN32 */
-    while (fgets(out, sizeof(out)-1, fd) != NULL) {
+
+    while (fgets(out, sizeof(out)-1, fd) != nullptr) {
             //printf("%s", out);
             itm = new QTreeWidgetItem(0);
             for(i=x=0; out[i]; ++i)
@@ -435,22 +435,22 @@ void MainWindow::cscopeQuery(int mode, QString keyword)
                     out[x++] = out[i];
             out[x] = '\0';
             tmp = strtok(out, " ");
-            if(tmp != NULL) {
+            if(tmp != nullptr) {
                 //printf("File\t: %s\n", tmp);
                 itm->setText(0,QString(tmp));
             }
             tmp = strtok(NULL, " ");
-            if(tmp != NULL) {
+            if(tmp != nullptr) {
                 //printf("Func\t: %s\n", tmp);
                 itm->setText(1,QString(tmp));
             }
             tmp = strtok(NULL, " ");
-            if (tmp != NULL) {
+            if (tmp != nullptr) {
                 //printf("Line\t: %s\n", tmp);
                 itm->setText(2,QString(tmp));
             }
             tmp = strtok(NULL, "\n");
-            if (tmp != NULL) {
+            if (tmp != nullptr) {
                 //printf("Code\t: %s\n", tmp);
                 itm->setText(3,QString(tmp));
             }
@@ -458,27 +458,22 @@ void MainWindow::cscopeQuery(int mode, QString keyword)
             //printf("\n");
         }
     ui->treeResults->addTopLevelItems(items);
-
-#ifdef _WIN32
-    _pclose(fd);
-#else
     pclose(fd);
-#endif /* _WIN32 */
     delete itm;
 }
 
-void MainWindow::cscopeClear()
+void KScope::cscopeClear()
 {
     ui->treeResults->clear();
     ui->treeFiles->clear();
 }
 
-void MainWindow::cscopeDestroy()
+void KScope::cscopeDestroy()
 {
-    system("rm -rf cscope.out");
+    remove("cscope.out");
 }
 
-void MainWindow::setupLexer(enum LexerType l)
+void KScope::setupLexer(enum LexerType l)
 {
     QFont norm_font = QFont("Ubuntu Mono", 11, QFont::Normal, false);
     QFont ital_font = QFont("Ubuntu Mono", 11, QFont::Normal, true);
@@ -525,83 +520,84 @@ void MainWindow::setupLexer(enum LexerType l)
         case LEXER_JAVA: {
             break;
         }
-        default: {
-            break;
-        }
+//        default: {
+//            break;
+//        }
     }
 }
 
-void MainWindow::cscopeReferencesDialog()
+void KScope::cscopeReferencesDialog()
 {
     cs->showReferences();
     D("CScope Find Text Dialog");
 }
 
-void MainWindow::cscopeDefinitionsDialog()
+void KScope::cscopeDefinitionsDialog()
 {
     cs->showDefinitions();
     D("CScope Find Text Dialog");
 }
 
-void MainWindow::cscopeCalledFunctionsDialog()
+void KScope::cscopeCalledFunctionsDialog()
 {
     cs->showCalledFunctions();
     D("CScope Find Text Dialog");
 }
 
-void MainWindow::cscopeCallingFunctionsDialog()
+void KScope::cscopeCallingFunctionsDialog()
 {
     cs->showCallingFunctions();
     D("CScope Find Text Dialog");
 }
 
-void MainWindow::cscopeFindTextDialog()
+void KScope::cscopeFindTextDialog()
 {
     cs->showFindText();
     D("CScope Find Text Dialog");
 }
 
-void MainWindow::cscopeFindEGrepDialog()
+void KScope::cscopeFindEGrepDialog()
 {
     cs->showFindEGrep();
     D("CScope Find Text Dialog");
 }
 
-void MainWindow::cscopeFindFileDialog()
+void KScope::cscopeFindFileDialog()
 {
     cs->showFindFile();
     D("CScope Find Text Dialog");
 }
 
-void MainWindow::cscopeIncludingFilesDialog()
+void KScope::cscopeIncludingFilesDialog()
 {
     cs->showIncludingFiles();
     D("CScope Find Text Dialog");
 }
 
-void MainWindow::cscopeResponse(int mode, QString keyword)
+void KScope::cscopeResponse(int mode, QString keyword)
 {
     cscopeQuery(mode, keyword);
 }
 
-void MainWindow::editorFindDialog()
+void KScope::editorFindDialog()
 {
     fr->showFind();
+    fr2->show();
     D("Find Dialog");
 }
 
-void MainWindow::editorReplaceDialog()
+void KScope::editorReplaceDialog()
 {
     fr->showReplace();
     D("Replace Dialog");
 }
 
-void MainWindow::editorFindResponse(QString string, bool re, bool cs, bool wo, bool wr)
+void KScope::editorFindResponse(QString string, bool re, bool cs, bool wo, bool wr)
 {
     ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->findFirst(string, re, cs, wo, wr);
 }
 
-void MainWindow::editorReplaceResponse(QString from, QString to, bool re, bool cs, bool wo, bool wr, bool all)
+void KScope::editorReplaceResponse(QString from, QString to, bool re, bool cs, bool wo, bool wr, bool all)
 {
     if (!all) {
         if (ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->findFirst(from, re, cs, wo, wr))
@@ -612,12 +608,12 @@ void MainWindow::editorReplaceResponse(QString from, QString to, bool re, bool c
     }
 }
 
-void MainWindow::editorTabChanged(int index)
+void KScope::editorTabChanged(int index)
 {
      D("Tab Changed to " + QString::number(index).toStdString());
 }
 
-void MainWindow::editorUpdate()
+void KScope::editorUpdate()
 {
     if (ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->isUndoAvailable()) {
     // ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), "*" + ui->tabWidget->tabText(ui->tabWidget->currentIndex()));
@@ -637,7 +633,7 @@ void MainWindow::editorUpdate()
     D("Updated Text");
 }
 
-void MainWindow::editorModified(bool status)
+void KScope::editorModified(bool status)
 {
     // there are some problems in here!!
     if (status == true) { // Icon change & show save prompt
@@ -649,7 +645,7 @@ void MainWindow::editorModified(bool status)
     }
 }
 
-void MainWindow::editorSelection()
+void KScope::editorSelection()
 {
     if (ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->selectedText().length() > 0) {
         D("Selected Text");
@@ -658,19 +654,19 @@ void MainWindow::editorSelection()
     }
 }
 
-void MainWindow::editorUndo()
+void KScope::editorUndo()
 {
     ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->undo();
     D("Undo");
 }
 
-void MainWindow::editorRedo()
+void KScope::editorRedo()
 {
     ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->redo();
     D("Redo");
 }
 
-void MainWindow::editorCut()
+void KScope::editorCut()
 {
     ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->cut();
     if (! ui->actionPaste->isEnabled()) {
@@ -679,7 +675,7 @@ void MainWindow::editorCut()
     D("Cut");
 }
 
-void MainWindow::editorCopy()
+void KScope::editorCopy()
 {
     ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->copy();
     if (! ui->actionPaste->isEnabled()) {
@@ -688,12 +684,12 @@ void MainWindow::editorCopy()
     D("Copy");
 }
 
-void MainWindow::editorPaste()
+void KScope::editorPaste()
 {
     ui->tabWidget->currentWidget()->findChild<QsciScintilla *>("editor")->paste();
 }
 
-void MainWindow::toggleSymbols()
+void KScope::toggleSymbols()
 {
     if(ui->dockSymbols->isVisible() == true)
         ui->dockSymbols->close();
@@ -701,7 +697,7 @@ void MainWindow::toggleSymbols()
         ui->dockSymbols->show();
 }
 
-void MainWindow::toggleCscope()
+void KScope::toggleCscope()
 {
     if(ui->dockCscope->isVisible() == true)
         ui->dockCscope->close();
@@ -709,7 +705,7 @@ void MainWindow::toggleCscope()
         ui->dockCscope->show();
 }
 
-void MainWindow::toggleFiles()
+void KScope::toggleFiles()
 {
     if(ui->dockFiles->isVisible() == true)
         ui->dockFiles->close();
@@ -717,7 +713,7 @@ void MainWindow::toggleFiles()
         ui->dockFiles->show();
 }
 
-void MainWindow::aboutDialog()
+void KScope::aboutDialog()
 {
     QMessageBox *qm = new QMessageBox(this);
     qm->setMinimumHeight(60);
@@ -735,7 +731,7 @@ void MainWindow::aboutDialog()
     qm->exec();
 }
 
-int MainWindow::getFirstTabIdFromName(QTabWidget *qtw, std::string name)
+int KScope::getFirstTabIdFromName(QTabWidget *qtw, std::string name)
 {
     for(int i = 0; i < qtw->count(); i++) {
         if(name == qtw->tabText(i).toStdString()) {
@@ -746,7 +742,7 @@ int MainWindow::getFirstTabIdFromName(QTabWidget *qtw, std::string name)
 }
 
 
-MainWindow::~MainWindow()
+KScope::~KScope()
 {
     cscopeDestroy();
     delete fr;
