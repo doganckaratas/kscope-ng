@@ -7,6 +7,9 @@
 #include <QDialog>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QCheckBox>
 
 class FindReplace2 : public QDialog
 {
@@ -17,11 +20,32 @@ public:
     void show();
 
 private:
-    QDialog *fr_dialog;
-    QTabWidget *fr_tabwidget;
-    QWidget *fr_findtab;
-    QWidget *fr_replacetab;
-    QVBoxLayout *fr_tablayout;
+    QDialog *dialog;
+    QTabWidget *tabwidget;
+    QVBoxLayout *tablayout;
+
+    QWidget *findtab;
+    QVBoxLayout *findlayout;
+    QHBoxLayout *textboxctl_layout;
+    QHBoxLayout *comboctl1_layout;
+    QHBoxLayout *comboctl2_layout;
+    QHBoxLayout *buttonctl_layout;
+    QSpacerItem *findspacer;
+    QLabel *findlabel;
+    QLineEdit *findtext;
+    QCheckBox *regexcheck;
+    QCheckBox *casecheck;
+    QCheckBox *exactcheck;
+    QCheckBox *wrapcheck;
+    QPushButton *findbutton;
+    QPushButton *cancelbutton;
+
+    QWidget *replacetab;
+    QVBoxLayout *replacelayout;
+
+    void setupFindView();
+    void setupReplaceView();
+    void setupView();
 
 signals:
 
