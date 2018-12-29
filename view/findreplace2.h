@@ -25,27 +25,44 @@ private:
     QVBoxLayout *tablayout;
 
     QWidget *findtab;
-    QVBoxLayout *findlayout;
-    QHBoxLayout *textboxctl_layout;
-    QHBoxLayout *comboctl1_layout;
-    QHBoxLayout *comboctl2_layout;
-    QHBoxLayout *buttonctl_layout;
-    QSpacerItem *findspacer;
-    QLabel *findlabel;
-    QLineEdit *findtext;
-    QCheckBox *regexcheck;
-    QCheckBox *casecheck;
-    QCheckBox *exactcheck;
-    QCheckBox *wrapcheck;
-    QPushButton *findbutton;
-    QPushButton *cancelbutton;
-
     QWidget *replacetab;
+    QVBoxLayout *findlayout;
     QVBoxLayout *replacelayout;
+    QHBoxLayout *findtextboxctl1_layout;
+    QHBoxLayout *findtextboxctl2_layout;
+    QHBoxLayout *replacetextboxctl_layout;
+    QHBoxLayout *findcomboctl1_layout;
+    QHBoxLayout *findcomboctl2_layout;
+    QHBoxLayout *replacecomboctl1_layout;
+    QHBoxLayout *replacecomboctl2_layout;
+    QHBoxLayout *findbuttonctl_layout;
+    QHBoxLayout *replacebuttonctl_layout;
+    QSpacerItem *findspacer;
+    QSpacerItem *replacespacer;
+    QLabel *findlabel1;
+    QLabel *findlabel2;
+    QLabel *replacelabel;
+    QLineEdit *findtext1;
+    QLineEdit *findtext2;
+    QLineEdit *replacetext;
+    QCheckBox *findregexcheck;
+    QCheckBox *findcasecheck;
+    QCheckBox *findexactcheck;
+    QCheckBox *findwrapcheck;
+    QCheckBox *replaceregexcheck;
+    QCheckBox *replacecasecheck;
+    QCheckBox *replaceexactcheck;
+    QCheckBox *replacewrapcheck;
+    QPushButton *findbutton;
+    QPushButton *replacebutton;
+    QPushButton *replaceallbutton;
+    QPushButton *findcancelbutton;
+    QPushButton *replacecancelbutton;
 
-    void setupFindView();
-    void setupReplaceView();
-    void setupView();
+    void initializeComponents();
+    void setupInterface();
+    void setupFindInterface();
+    void setupReplaceInterface();
 
 signals:
 
